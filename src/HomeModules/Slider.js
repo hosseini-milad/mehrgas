@@ -20,14 +20,14 @@ function Slider(props){
     return(
         <div className="slidersList">
             <div className="slider">
-                {(slider&&slider[sliderIndex].imageUrl)?
+                {(slider&&slider[sliderIndex]&&slider[sliderIndex].imageUrl)?
                     <img className="sliderImg" src={env.siteApiUrl+slider[sliderIndex].imageUrl} alt={slider[sliderIndex].title} />:
                 env.loader}
                 <div className="sliderTextHolder">
                     <img src="/logo.png" alt = "logo" />
                     <div className="sliderText">
-                        {slider?<span>{slider[sliderIndex].description}</span>:''}
-                        {slider?<h2>{slider[sliderIndex].title}</h2>:''}
+                        {slider&&slider[sliderIndex]?<span>{slider[sliderIndex].description}</span>:''}
+                        {slider&&slider[sliderIndex]?<h2>{slider[sliderIndex].title}</h2>:''}
                     </div>
                     <div className="sliderBullet">
                         {slider&&slider.map((slider,i)=>(

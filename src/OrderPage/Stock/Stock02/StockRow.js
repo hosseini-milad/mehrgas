@@ -35,8 +35,6 @@ function StockRow(props){
         <td style={{direction:"ltr"}}><strong>{stockData.brandName}</strong> - {stockData.lenzIndex}<br/>
           {stockData.material} {stockData.coating?" - "+stockData.coating:""}</td>
         
-        <td><strong>SPH: </strong>{stockData.sph} | <strong>CYL: </strong>{stockData.cyl}</td>
-        <td>{props.stock.align}</td>
         <td>{props.stock.count}</td>
         <td width={100}><button className="editTable" onClick={()=>{editItem(stockData)
         props.setEditRow(props.index)}}>ویرایش</button></td></>:

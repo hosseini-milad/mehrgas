@@ -37,7 +37,7 @@ function FilterStock(props){
                     {return { ...pState, lenzIndex:Value }}
                 )}
                 renderInput={(params) =>
-                <TextField {...params} label="ضریب شکست"/>}
+                <TextField {...params} label="نوع کالا"/>}
             />
             <Autocomplete
                 options={brandList.materialList||[]} 
@@ -49,7 +49,7 @@ function FilterStock(props){
                     {return { ...pState, material:Value }}
                 )}
                 renderInput={(params) =>
-                <TextField {...params} label="متریال"/>}
+                <TextField {...params} label="حجم کالا"/>}
                 />
             <Autocomplete
                 options={brandList.coatingList||[]} 
@@ -61,87 +61,9 @@ function FilterStock(props){
                     {return { ...pState, coating:Value }}
                 )}
                 renderInput={(params) =>
-                <TextField {...params} label="پوشش"/>}
+                <TextField {...params} label="جنس بدنه"/>}
                 />
 
-                {/*<Autocomplete
-                        options={["6.00","4.00","2.00","0.00","-2.00","-4.00","-6.00"]} 
-                        freeSolo
-                        style={{ width: "100%"}}
-                        value={props.stockResult.sphF||''}
-                        
-                        onChange={(_event, Value)=>props.setStockResult(pState => 
-                            {return { ...pState, sphF:Value }}
-                        )}
-                        renderInput={(params) =>
-                        <TextField {...params} label="SPH From"/>}
-                        />*/}
-                    <div className='positiveBtn' style={{margin:"20px 0 0 20px",position:"relative"}}
-                     >
-                        <span className={markSph?"pBtn":"dBtn"} onClick={()=>setMarkSph(1)}>+</span>
-                        <span className={!markSph?"nBtn":"dBtn"} onClick={()=>setMarkSph(0)}>-</span>
-                        <TextField label="SPH Fix" className="sphFix"
-                         defaultValue={props.stockResult.sphFix}
-                        onChange={(e)=>(e.target.value.length>4||e.target.value==="0.00"||e.target.value==="")&&
-                        props.setStockResult(pState => 
-                            {return { ...pState, sphFix:e.target.value }}
-                        )} />
-                        <TextField label="CYL Fix" className="sphFix" style={{left:"130px"}}
-                         defaultValue={props.stockResult.cylFix}
-                        onChange={(e)=>(e.target.value.length>4||e.target.value==="0.00"||e.target.value==="")&&
-                        props.setStockResult(pState => 
-                            {return { ...pState, cylFix:e.target.value }}
-                        )} />
-                    </div>
-                    <Autocomplete
-                        options={sphOptions} 
-                        freeSolo
-                        style={{ width: "100%"}}
-                        value={props.stockResult.sphT||''}
-                        
-                        onChange={(_event, Value)=>props.setStockResult(pState => 
-                            {return { ...pState, sphT:Value }}
-                        )}
-                        renderInput={(params) =>
-                        <TextField {...params} label="SPH"/>}
-                    />
-                    
-                    <Autocomplete
-                        options={["-2.00","-4.00","-6.00"]} 
-                        freeSolo
-                        style={{ width: "100%"}}
-                        value={props.stockResult.cyl||''}
-                        
-                        onChange={(_event, Value)=>props.setStockResult(pState => 
-                            {return { ...pState, cyl:Value }}
-                        )}
-                        renderInput={(params) =>
-                        <TextField {...params} label="CYL"/>}
-                    />
-                    <Autocomplete
-                    options={["65","70","75"]} 
-                    freeSolo
-                    style={{ width: "100%"}}
-                    value={props.stockResult.dia||''}
-                    
-                    onChange={(_event, Value)=>props.setStockResult(pState => 
-                        {return { ...pState, dia:Value }}
-                    )}
-                    renderInput={(params) =>
-                    <TextField {...params} label="DIA"/>}
-                    />
-                    <Autocomplete
-                    options={["0.75","1.00","1.25","1.50","1.75","2.00","2.25","2.50","2.75","3.00","3.25","3.50"]} 
-                    freeSolo
-                    style={{ width: "100%"}}
-                    value={props.stockResult.add||''}
-                    
-                    onChange={(_event, Value)=>props.setStockResult(pState => 
-                        {return { ...pState, add:Value }}
-                    )}
-                    renderInput={(params) =>
-                    <TextField {...params} label="ADD"/>}
-                />
             </div>
             </>}
         </div>

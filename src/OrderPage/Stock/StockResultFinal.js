@@ -54,33 +54,15 @@ function StockResult(props){
         <div className="orderDataHolder StockDataHolder">
             {content.size&&content.size===1?
                 <div className="stockResultItems"><div>
-                  {content.stockOD.length?<><strong>L</strong>
-                    {/*<small>{`(${content.stockOD[0].sku})`} </small>
-                    <strong>{`- ${content.stockOD[0].brandName} 
-                    ${content.stockOD[0].lenzIndex}`}</strong>
-            <span>{normalPrice(content.stockOD[0].price)}</span>*/}
-                <strong style={{color:"green",margin:"auto 10px"}}>موجود است</strong></>:<></>}
-                    {content.stockOD.length&&content.stockOS.length?<hr/>:<></>}
-                    {content.stockOS.length?<><strong>R</strong>
-                    {/*<small>{`(${content.stockOS[0].sku})`} </small>
-                    <strong>{`- ${content.stockOS[0].brandName} 
-                    ${content.stockOS[0].lenzIndex}`}</strong> - 
-                    <span>{normalPrice(content.stockOS[0].price)}</span>*/}
-                    <strong style={{color:"green",margin:"auto 10px"}}>موجود است</strong></>:<></>}
-                    </div>
+                    <strong>{content.stock[0].brandName}</strong>
+                    <span>{normalPrice(content.stock[0].price)}</span>
+                </div>
                   <input className="orderBtn stockAdd" id="Add"
                     onClick={()=>{
-                      if(content.stockOD.length)
-                        saveCart({sku:content.stockOD[0].sku,
-                          hesabfa:content.stockOD[0].hesabfa,
-                          align:"L",
+                        saveCart({sku:content.stock[0].sku,
+                          
                           count:props.count[0]})
-                      if(content.stockOS.length)
-                        saveCart({sku:content.stockOS[0].sku,
-                          hesabfa:content.stockOS[0].hesabfa,
-                          align:"R",
-                          count:props.count[1]})
-
+                      
                     }}
                     value="افزودن" type="button"/>
                 </div>:<></>}

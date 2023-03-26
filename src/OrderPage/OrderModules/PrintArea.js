@@ -137,12 +137,12 @@ function PrintArea(props){
         <div className="printArea">
             <div className="userInfo">
               <div className="userSection">
-                <strong>مرکز تخصصی سفارشات نسخه ای</strong>
-                <span>www.MGMLens.com</span>
+                <strong>مهرگاز | تامین و توزیع گاز مایع</strong>
+                <span>www.MehrGaz.com</span>
                 <span>کد: 15</span>
               </div>
               <div className="userSection">
-                <h1>MGM Lens</h1>
+                <h1>Mehr Gaz</h1>
               </div>
               <div className="userSection">
                 <small>تاریخ: <b>{pDate&&pDate.split(' ')[0]}</b></small>

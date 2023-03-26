@@ -9,7 +9,7 @@ function ProfileStockItem(props){
     const [brandData,setBrandData] = useState('')
     const [userInfo , setUserInfo] = useState({})
     const [showDetail,setShowDetail] = useState(props.open);
-  //console.log(props)
+    
     useEffect(() => {
         const data = orderData&&orderData.rxLenz?orderData.rxLenz.split(','):[];
         var postOptions={
@@ -41,7 +41,6 @@ function ProfileStockItem(props){
                 .then(res => res.json())
                 .then(
                   (result) => {
-                    //console.log(result,data)
                     setUserInfo(result)
                   },
                   (error) => {

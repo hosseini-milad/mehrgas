@@ -21,7 +21,7 @@ function StockEdit(){
     const [count,setCount] = useState("1")
     const [error,setError] = useState("1")
     
-    console.log(editItemData)
+    //console.log(editItemData)
     useEffect(() => {
         const body={
             search:stockId,
@@ -54,16 +54,12 @@ function StockEdit(){
     },[editItemData])
     useEffect(() => {
         //console.log(editItemData.sph)
-        if(newSPH&&newSPH.length>4&&newCYL&&newCYL.length>4||
-            editItemData&&editItemData.sph){
+        
         const body={
             brand:brandFilter.brandName,
             lenzIndex:brandFilter.lenzIndex,
             material:brandFilter.material,
             coating:brandFilter.coating,
-
-            osSph:editItemData?editItemData.sph:newSPH,
-            osCyl:editItemData?editItemData.cyl:newCYL,
             //price:price,
             sort:"lenzIndex",
             sortAsc:"1"
@@ -79,16 +75,17 @@ function StockEdit(){
       .then(
         (result) => {
             setBrandContent('')
+            console.log(result)
             //if(result.size===1)saveCart
-            setNewItem(result.size === 1?result.stockOD.length?
-            result.stockOD[0]:result.stockOS[0]:'')
+            setNewItem(result.size === 1?
+            result.stock[0]:'')
             setTimeout(()=> setBrandContent(result),200)
         },
         (error) => {
           console.log(error);
         }
         
-    )}},[brandFilter,newSPH,newCYL,editItemData])
+    )},[brandFilter,newSPH,newCYL,editItemData])
     //console.log(brandContent)
     const updateContent=(newItem,oldID,reload)=>{
         const body={
@@ -126,7 +123,7 @@ function StockEdit(){
               'Content-Type': 'application/json',
               'x-access-token':token.token,
               'userId':token.userId},
-              body:JSON.stringify({status:"delivered",stockOrderNo:stockId})
+              body:JSON.stringify({status:"inVehicle",stockOrderNo:stockId})
           }
           console.log(postOptions)
           fetch(env.siteApi+"/order/manage/addStock",postOptions)
@@ -151,20 +148,7 @@ function StockEdit(){
         <div className="filtersEdit" style={{display:editRow!==-1?"flex":"none"}}>
             <div className="filtersTotal">
             <div className="filterSPH">
-                <TextField label="SPH" variant="outlined" className="filterEditStock"
-                    value={editItemData?editItemData.sph:"SPH"} disabled="true"/>
-                <TextField label="CYL" variant="outlined" className="filterEditStock"
-                    value={editItemData?editItemData.cyl:"CYL"} disabled={true}/>
-                <Autocomplete
-                        options={["R","L"]} 
-                        disableClearable
-                        className="filterEditStock"
-                        //defaultValue={editItemData&&editItemData.align||"R"}
-                        value={align||"R"}
-                        onChange={(e,value)=>setAlign(value)}
-                        renderInput={(params) =>
-                        <TextField {...params} variant="outlined"/>}
-                    />
+                
                     <TextField onChange={(e)=>setCount(e.target.value)} defaultValue="1"
                         value={count||"1"}
                         className="filterEditStock" variant="outlined" label="تعداد"/>
@@ -216,8 +200,6 @@ function StockEdit(){
                 <tr>
                     <th>ردیف</th>
                     <th>برند</th>
-                    <th>عدسی</th>
-                    <th>جهت</th>
                     <th>تعداد</th>
                     <th>عملیات</th>
                 </tr>

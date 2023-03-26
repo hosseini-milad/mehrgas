@@ -1,5 +1,5 @@
 
-import {Box, Slider } from '@material-ui/core';
+import { TextField } from "@material-ui/core"
 import { useEffect, useState } from "react";
 import StockResult from "./StockResultFinal";
 import env, { normalPrice } from "../../env";
@@ -18,7 +18,7 @@ function StockStep(props){
     const [brandFilter,setBrandFilter]= useState("")
     const [price,setPrice] = useState([0,500]);
     const [content,setContent]= useState(0)
-    const [odCount,setODCount] = useState([1,1]);
+    const [count,setCount] = useState(1);
     useEffect(() => {
         //console.log(props)
         const body={
@@ -27,12 +27,6 @@ function StockStep(props){
             material:brandFilter&&brandFilter.material,
             coating:brandFilter&&brandFilter.coating,
 
-            osSph:mainValue[0],
-            osCyl:mainValue[1],
-            odSph:mainLeft[0],
-            odCyl:mainLeft[1],
-            dia:mainValue[2]?mainValue[2]:'',
-            add:mainValue[3]?mainValue[3]:'',
             //price:price,
             sort:"lenzIndex",
             sortAsc:"1"
@@ -47,6 +41,7 @@ function StockStep(props){
       .then(res => res.json())
       .then(
         (result) => {
+            console.log(result)
             setContent('')
             //if(result.size===1)saveCart
             setTimeout(()=> setContent(result),200)
@@ -80,25 +75,16 @@ function StockStep(props){
     return(<>
         <div className='stockMainHolder' style={{display:"grid"}}>
             <div className="orderDataHolder">
-            {wWidth>700?<>
-                <ODOSStock params={props.params} setMainValue={setMainValue} 
-                    mainValue={mainValue} title="R" setCount={setODCount} count={odCount}/>
-                <ODOSStock params={props.params} setMainValue={setMainLeft} 
-                    mainValue={mainLeft} title="L" setCount={setODCount} count={odCount}/></>:
-                <>
-                <ODOSStockMobile params={props.params} setMainValue={setMainValue} 
-                    mainValue={mainValue} title="R" setCount={setODCount} count={odCount}/>
-                <ODOSStockMobile params={props.params} setMainValue={setMainLeft} 
-                    mainValue={mainLeft} title="L" setCount={setODCount} count={odCount}/>
-                    </>}
-                
+            
                 {wWidth>700?<BrandHolderStock setBrandFilter={setBrandFilter} brandFilter={brandFilter}
                     content = {content}/>:
                     <BrandHolderStockMobile setBrandFilter={setBrandFilter} brandFilter={brandFilter}/>}
                 
+                    <TextField label="تعداد" variant="outlined" value={count}
+                    onChange={(e)=>setCount(e.target.value)}/>
             </div>
             <StockResult setStockItem={props.setStockItem} 
-                content={content} count={odCount}
+                content={content} count={count}
                 orderCount={props.orderCount} setOrderCount={props.setOrderCount}/>
         </div>
         <StockFaktorPreview faktor={faktor} setFaktor={setFaktor} //setCount={setCount}

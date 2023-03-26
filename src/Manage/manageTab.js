@@ -7,8 +7,7 @@ function ManageTab(props){
     const tabIndex = props.index;
     var tabOptions = [
         {tab:"مدیریت سفارش",icon:"shopping-bag",url:"orders",index:0},
-        {tab:"Stock مدیریت",icon:"dollar",url:"price",index:1},
-        {tab:"مدیریت RX",icon:"clock-o",url:"manufacture",index:2},
+        {tab:"مدیریت کالا",icon:"dollar",url:"price",index:1},
         {tab:"سفارشات",icon:"user-o",url:"customer",index:3},
         {tab:"تخفیف ها",icon:"envelope-o",url:"offers",index:4},
         {tab:"پیام ها",icon:"envelope-o",url:"messages",index:5},

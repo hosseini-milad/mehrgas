@@ -65,7 +65,7 @@ function BrandHolderStock(props){
             field==="lenzIndex"?`#Material`:
             field==="material"?"#Add":"#Add"
           );
-          console.log(field,nextfield)
+          //console.log(field,nextfield)
           // If found, focus the next field
           if (nextfield !== null) {
             setTimeout(()=>nextfield.focus(),200);
@@ -81,7 +81,7 @@ function BrandHolderStock(props){
                     value={props.brandFilter.brandName||''}
                     onChange={(_event, data)=>updateQuery("brandName",data)}
                     renderInput={(params) =>
-                    <TextField {...params} label="Brand" variant="outlined"/>}
+                    <TextField {...params} label="برند" variant="outlined"/>}
                 />}
             </div>
             <div className='lenzData'>
@@ -92,7 +92,7 @@ function BrandHolderStock(props){
                     onChange={(_event, data)=>updateQuery("lenzIndex",data)}
                     value={props.brandFilter.lenzIndex|| null}
                     renderInput={(params) =>
-                    <TextField {...params}  label="Lens Index" variant="outlined"  />}
+                    <TextField {...params}  label="نوع کالا" variant="outlined"  />}
                 />}
             </div>
             <div className='lenzData'>
@@ -103,21 +103,19 @@ function BrandHolderStock(props){
                     onChange={(_event, data)=>updateQuery("material",data)}
                     value={props.brandFilter.material|| null}
                     renderInput={(params) =>
-                    <TextField {...params}  label="Material" variant="outlined"  />}
+                    <TextField {...params}  label="حجم کالا" variant="outlined"  />}
                 />}
             </div>
             <div className='lenzData'>
                 {existItems&& <Autocomplete id="Coating"
-                    disabled={props.brandFilter.material?true:true}
+                    disabled={props.brandFilter.material?false:true}
                     options={content?removeNull(content.coatingList):[]}
                     style={{ width: "100%"}}
                     onChange={(_event, data)=>updateQuery("coating",data)}
                     //value={props.brandFilter.coating|| null}
-                    value={(content.coatingList&&props.brandFilter.material
-                            &&content.coatingList.length===1)?
-                            content.coatingList[0]:''}
+                    value={props.brandFilter.coating|| null}
                     renderInput={(params) =>
-                    <TextField {...params} label="Coating" variant="outlined"/>}
+                    <TextField {...params} label="جنس بدنه" variant="outlined"/>}
                 />}
                     </div>
         </div>

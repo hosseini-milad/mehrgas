@@ -25,12 +25,12 @@ function ManagePrice(){
         setBrandSelect(e);
         setSelectBrand({brand:e&&e.enTitle})
     }
-    const options=["عملیات","sku","برند","لنز","قیمت واحد"
-            ,"تخفیف","قیمت خرید"];
-    const rowSpan=["1","2","1","1","2","2","2"]
-    const colSpan=["2","1","4","6","1","1","1"]
-    const subOptions=["ذخیره","کپی","نام برند","ض.شکست","متریال",
-            "پوشش","جهت","SPH","CYL","DIA","ADD","نوع عدسی"];  
+    const options=["عملیات","sku","برند","قیمت واحد"
+            ,"تخفیف","قیمت عمده"];
+    const rowSpan=["1","2","1","2","2","2"]
+    const colSpan=["2","1","4","1","1","1"]
+    const subOptions=["ذخیره","کپی","نام برند","نوع کالا","حجم کالا",
+            "جنس بدنه"];  
 
     const [pageNumber,setPageNumber] = useState('')
     const [content,setContent] = useState('')   
@@ -89,14 +89,8 @@ function ManagePrice(){
             material:e[5].firstChild.firstChild.firstChild.firstChild.value,
             coating:e[6].firstChild.firstChild.firstChild.firstChild.value,
             design:e[6].firstChild.firstChild.firstChild.firstChild.value,
-            align: e[7].firstChild.firstChild.firstChild.firstChild.value,
-            sph: e[8].childNodes[0].value,
-            cyl: e[9].childNodes[0].value,
-            dia: e[10].firstChild.firstChild.firstChild.firstChild.value,
-            add: e[11].firstChild.firstChild.firstChild.firstChild.value,
-            design: e[12].firstChild.firstChild.firstChild.firstChild.value,
             
-            price:e[13].childNodes[0].value,
+            price:e[7].childNodes[0].value,
         }
         //Object.assign(body);
         const token = JSON.parse(localStorage.getItem('token-lenz'))
@@ -160,15 +154,8 @@ function ManagePrice(){
             lenzIndex:e[4].firstChild.firstChild.firstChild.firstChild.value,
             material:e[5].firstChild.firstChild.firstChild.firstChild.value,
             coating:e[6].firstChild.firstChild.firstChild.firstChild.value,
-            //design:e[6].firstChild.firstChild.firstChild.firstChild.value,
-            align: e[7].firstChild.firstChild.firstChild.firstChild.value,
-            sph: e[8].childNodes[0].value,
-            cyl: e[9].childNodes[0].value,
-            dia: e[10].firstChild.firstChild.firstChild.firstChild.value,
-            add: e[11].firstChild.firstChild.firstChild.firstChild.value,
-            design:e[12].firstChild.firstChild.firstChild.firstChild.value,
             
-            price:e[13].childNodes[0].value
+            price:e[7].childNodes[0].value
         }
         setSelectCopy(body)
     }
@@ -192,7 +179,7 @@ function ManagePrice(){
                     <TextField {...params} />}
                 />
             </div>
-        {content&&<ManyPrice content={content} setPriceSet={setPriceSet}/>}
+        {/*content&&<ManyPrice content={content} setPriceSet={setPriceSet}/>*/}
             <table className="orderTable stockTable">
             <tbody>
                 <tr> 
@@ -246,36 +233,7 @@ function ManagePrice(){
                         renderInput={(params) =>
                         <TextField {...params} />}
                     /></td>
-                    <td width={40}><Autocomplete
-                        disableClearable freeSolo
-                        options={removeNull(content.alignList)||[]}
-                        value={selectedCopy.align||""}
-                        renderInput={(params) =>
-                        <TextField {...params} />}
-                    /></td>
-                    <td width={40}><input type="text" defaultValue={selectedCopy.sph||""}/></td>
-                    <td width={40}><input type="text" defaultValue={selectedCopy.cyl||""} /></td>
-                    <td width={40}><Autocomplete
-                        disableClearable freeSolo
-                        options={["65","70"]}
-                        value={selectedCopy.dia||""}
-                        renderInput={(params) =>
-                        <TextField {...params} />}
-                    /></td>
-                    <td width={40}><Autocomplete
-                        disableClearable freeSolo
-                        options={["0.75","1.00","1.25","1.50","1.75","2.00","2.25","2.50","2.75","3.00","3.25","3.50"]}
-                        value={selectedCopy.add||""}
-                        renderInput={(params) =>
-                        <TextField {...params} />}
-                    /></td>
-                     <td width={40}><Autocomplete
-                        disableClearable freeSolo
-                        options={removeNull(content.designList)||[]}
-                        value={selectedCopy.design||""}
-                        renderInput={(params) =>
-                        <TextField {...params} />}
-                    /></td>
+                    
                     <td ><input style={{width:"90%"}} type="text" defaultValue={selectedCopy.price||""} onChange={(e)=>e.target.value= normalPrice(e.target.value)}/></td>
                     <td ><input style={{width:"90%"}} type="text" onChange={(e)=>e.target.value= normalPrice(e.target.value)}/></td>
                     <td ><input style={{width:"90%"}} type="text" defaultValue={selectedCopy.purchase||""} onChange={(e)=>e.target.value= normalPrice(e.target.value)}/></td>
@@ -331,40 +289,7 @@ function ManagePrice(){
                         <TextField {...params} />}
                     />} 
                     </td>
-                    <td width={120}>{brandList&& <Autocomplete
-                        disableClearable freeSolo
-                        options={removeNull(content.alignList)||[]}
-                        style={{ width: "100%"}}
-                        defaultValue={stockItem.align}
-                        renderInput={(params) =>
-                        <TextField {...params} />}
-                    />}</td>
-                    <td width={40}><input type="text" defaultValue={stockItem.sph}/></td>
-                    <td width={40}><input type="text" defaultValue={stockItem.cyl}/></td>
-                    <td width={40}>{brandList&& <Autocomplete
-                        disableClearable freeSolo
-                        options={["65","70"]}
-                        style={{ width: "100%"}}
-                        defaultValue={stockItem.dia}
-                        renderInput={(params) =>
-                        <TextField {...params} />}
-                    />} </td>
-                    <td width={40}>{brandList&& <Autocomplete
-                        disableClearable freeSolo
-                        options={["0.75","1.00","1.25","1.50","1.75","2.00","2.25","2.50","2.75","3.00","3.25","3.50"]}
-                        style={{ width: "100%"}}
-                        defaultValue={stockItem.add}
-                        renderInput={(params) =>
-                        <TextField {...params} />}
-                    />} </td>
-                    <td width={120}>{brandList&& <Autocomplete
-                        disableClearable freeSolo
-                        options={removeNull(content.designList)||[]}
-                        style={{ width: "100%"}}
-                        defaultValue={stockItem.design}
-                        renderInput={(params) =>
-                        <TextField {...params} />}
-                    />}</td>
+                
                     <td width={130}><input style={{width:"90%"}} type="text" defaultValue={normalPrice(stockItem.price)}
                         onChange={(e)=>e.target.value= normalPrice(e.target.value)}/></td>
                     <td >{normalPrice(stockItem.purchaseOS)}</td>

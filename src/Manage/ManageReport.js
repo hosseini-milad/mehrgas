@@ -19,7 +19,7 @@ function ManageReport(){
 
     const [pageNumber,setPageNumber] = useState('')
     const [content,setContent] = useState('')
-    //console.log(content)
+    console.log(content)
     useEffect(() => {
         const body={
             offset:pageNumber,
@@ -55,8 +55,7 @@ function ManageReport(){
     useEffect(() => {
         setPageNumber('')
     },[manResult])
-    const options=["عملیات"," ","مشتری","شماره سفارش","تاریخ","وضعیت","قیمت","برنـد",
-            "متریال"];
+    const options=["عملیات"," ","مشتری","شماره سفارش","تاریخ","وضعیت","قیمت"];
     return(
         <div className='orderTableHolder'>
             <div className="filters">
@@ -93,18 +92,17 @@ function ManageReport(){
                 {content&&content.filter&&content.filter.map((manItem,i)=>(
                     //console.log(manItem)||
                 <tr key={i} onClick={()=>{}}>
-                    <td onClick={(e)=>{window.open("/print/"+manItem.rxOrderNo,'_blank')}}
+                    <td onClick={(e)=>{window.open("/print/"+manItem.stockOrderNo,'_blank')}}
                     className="saveManager">مشاهده</td>
-                    <td onClick={(e)=>{window.open("/status/"+manItem.rxOrderNo,'_blank')}}
+                    <td onClick={(e)=>{window.open("/status/"+manItem.stockOrderNo,'_blank')}}
                     className="saveManager">سابقه</td>
                     <td>{(manItem.userInfo[0]&&(manItem.userInfo[0].cName?
                     manItem.userInfo[0].cName:manItem.userInfo[0].phone))}</td>
-                    <td>{manItem.rxOrderNo}</td>
+                    <td>{manItem.stockOrderNo}</td>
                     <td><DateShow date={manItem.date}/></td>
                     <td>{orderStatus(manItem.status)}</td>
-                    <td>{manItem.totalPrice&&normalPrice(manItem.totalPrice)}</td>
-                    <td>{manItem.brand}</td>
-                    <td></td>
+                    <td>{manItem.stockOrderPrice&&normalPrice(manItem.stockOrderPrice)}</td>
+                    
                 </tr>
                 ))}
                 

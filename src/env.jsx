@@ -1,11 +1,11 @@
 const env={
     //siteApi:'http://localhost:4000/api',
-    siteApi:'https://orderadmin.deleves.com/api',
-    //siteApi:'https://admin.mgmlens.com/api',
+    //siteApi:'https://orderadmin.deleves.com/api',
+    siteApi:'https://admin.mgmlens.com/api',
     
     //siteApiUrl:'http://localhost:4000',
-    siteApiUrl:'https://orderadmin.deleves.com',
-    //siteApiUrl:'https://admin.mgmlens.com',
+    //siteApiUrl:'https://orderadmin.deleves.com',
+    siteApiUrl:'https://admin.mgmlens.com',
  
     loader:<img className="imgLoader" src="/img/loaderMGM.gif"/>,
     touch:<img className="touchLoader" src="/img/loaderMGM.gif"/>,
@@ -166,7 +166,7 @@ export const orderStatus=(e)=>{
   if(e==="inproduction")return("در حال تولید")
   if(e==="faktor")return("تولید شده")
   if(e==="sending")return("ارسال از کارخانه")
-  if(e==="store")return("انبار")
+  if(e==="inVehicle")return("درب ورود")
   if(e==="delivered")return("تحویل به انبار")
   if(e===/suspend/)return("معلق")
   if(e==="shop")return("فروشگاه")
@@ -184,7 +184,7 @@ export const orderStatusRev=(e)=>{
   if(e==="معلق")return("suspend")
   if(e==="ارسال از کارخانه")return("sending")
   if(e==="ارسال از فروشگاه")return("storeSent")
-  if(e==="انبار")return("store")
+  if(e==="درب ورود")return("inVehicle")
   if(e==="تحویل به انبار")return("delivered")
   if(e==="فروشگاه")return("shop")
   if(e==="ارسال به مشتری")return("completed")
@@ -237,3 +237,4 @@ export function jalali_to_gregorian(jy, jm, jd) {
   for (gm = 0; gm < 13 && gd > sal_a[gm]; gm++) gd -= sal_a[gm];
   return [gy, gm, gd];
 }
+

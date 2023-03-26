@@ -168,7 +168,7 @@ function ManageOffers(){
                     <td width="80">{manItem&&manItem.phone}</td>
                     <td width="80">
                         <Autocomplete
-                        options={["manager","factory","store","customer","shop","request","sale"]} 
+                        options={["manager","security","control","customer","shop","request","sale"]} 
                         disableClearable freeSolo
                         
                         defaultValue={manItem.access}

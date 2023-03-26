@@ -176,8 +176,6 @@ function StockFaktorPreview(props){
                     <th className="mobileHide" style={{width:"20px"}}>ردیف</th>
                     <th className="mobileHide" style={{width:"35px"}}>کد</th>
                     <th>برند</th>
-                    <th style={{minWidth:"100px"}}>عدسی </th>
-                    <th>جهت</th>
                     <th style={{width:"35px"}}>تعداد</th>
                     <th>قیمت واحد</th>
                     <th>قیمت کل</th>
@@ -194,10 +192,6 @@ function StockFaktorPreview(props){
                         ""+faktorItem.stockDetail[0].material+"-"+
                         (faktorItem.stockDetail[0].coating&&faktorItem.stockDetail[0].coating)}}>
                     </td>
-                    <td dangerouslySetInnerHTML={{__html:
-                    (faktorItem.stockDetail[0].sph?"<strong>SPH: </strong>"+faktorItem.stockDetail[0].sph
-                        +" | <strong>CYL: </strong>"+faktorItem.stockDetail[0].cyl:'')}} style={{direction: "ltr"}}></td>
-                    <td dangerouslySetInnerHTML={{__html:(`<strong>${faktorItem.align}</strong>`)}} style={{direction: "ltr"}}></td>
                     <td><input className="stockCountInput orderTableInput" type="text" defaultValue={faktorItem.count} 
                         onChange={(e)=>updateCount(faktorItem,e.target.value)}/></td>
                     <td style={{direction: "ltr"}} dangerouslySetInnerHTML={{__html:
@@ -208,7 +202,7 @@ function StockFaktorPreview(props){
                     </tr>
                 ))}
                 <tr>
-                    <td colSpan={5}></td>
+                    <td colSpan={3}></td>
                     <td>قیمت کل</td>
                     <td colSpan={3} style={{fontSize:"15px",fontWeight:"bold"}}>{normalPrice(totalPrice(faktor))} ریال</td>
                 </tr>

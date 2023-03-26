@@ -9,6 +9,8 @@ import ManageHeader from '../ManagerAction/ManageHeader';
 import ManageStockHeader from '../ManagerAction/ManageStockHeader';
 import StoreHeader from '../ManagerAction/StoreHeader';
 import ShopHeader from '../ManagerAction/ShopHeader';
+import ControlStockHeader from '../ManagerAction/ControlStockHeader';
+import SimpleStockHeader from '../ManagerAction/SimpleStockHeader';
 
 function StockHeader(props){
     const orderData = props.orderData;
@@ -61,9 +63,10 @@ function StockHeader(props){
             props.manager==="manager"?(<ManageStockHeader orderData={orderData} 
                 changeOrderStatus={changeOrderStatus} setAlertShow={setAlertShow}/>):
             
-            props.manager==="store"?(<StoreHeader orderData={orderData} 
+            props.manager==="control"?(<ControlStockHeader orderData={orderData} 
                 changeOrderStatus={changeOrderStatus} setAlertShow={setAlertShow}/>):
-            props.manager==="shop"?(<ShopHeader orderData={orderData} 
+            props.manager==="security"?(<SimpleStockHeader orderData={orderData} 
+                status="completed"
                 changeOrderStatus={changeOrderStatus} setAlertShow={setAlertShow}/>):''}
             {orderData.status.includes("cancel")&&
             <small style={{color:"red"}}>

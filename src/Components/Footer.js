@@ -17,7 +17,7 @@ const Footer = (props)=>{
             </div>}
             <div className="mainFooter">
                 <div className="footerAbout">
-                    <img src="/logo.png" alt="logo"/>
+                    <img src="/logo.svg" alt="logo"/>
                     <p dangerouslySetInnerHTML={{__html:categories.about&&categories.about.shortDesc}}>
                     
                     </p>
@@ -31,8 +31,8 @@ const Footer = (props)=>{
                 </div>
                 <div className="footerMenu">
                     <ul className="footerUl">
-                        <li onClick={()=>window.location.href="/order/rx"}>عدسی های سفارشی(RX)</li>
-                        <li onClick={()=>window.location.href="/order/stock"}>عدسی های آماده(stock)</li>
+                        <li onClick={()=>window.location.href="/order/rx"}>سفارش آنلاین</li>
+                        <li onClick={()=>window.location.href="/order/stock"}>کپسول گاز</li>
                         <li onClick={()=>window.location.href="/quality"}>گارانتی</li>
                         <li>اخبار و مقالات</li>
                         <li onClick={()=>window.location.href="/about"}>درباره ما</li>

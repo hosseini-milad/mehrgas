@@ -49,8 +49,6 @@ function PreviewStock(props){
                         <th style={{width:"20px"}}>ردیف</th>
                         {/*<th style={{width:"35px"}}>کد</th>*/}
                         <th>برند</th>
-                        <th>عدسی </th>
-                        <th>جهت</th>
                         <th style={{width:"35px"}}>تعداد</th>
                         <th>قیمت واحد</th>
                         <th>قیمت کل</th>
@@ -64,9 +62,6 @@ function PreviewStock(props){
                             stockDetail[i].lenzIndex+"<br/>"+
                             ""+stockDetail[i].material+"-"+
                             (stockDetail[i].coating&&stockDetail[i].coating)}}></td>
-                        <td dangerouslySetInnerHTML={{__html:(stockDetail[i].sph?"<strong>SPH: </strong>"+stockDetail[i].sph
-                            +" | <strong>CYL: </strong>"+stockDetail[i].cyl:'')}}></td>
-                        <td dangerouslySetInnerHTML={{__html:`<strong>${faktorItem.align}</strong>`}} style={{direction: "ltr"}}></td>
                         <td>{faktorItem.count}</td>
                         <td style={{direction: "ltr"}} >{normalPrice(faktorItem.price)}</td>
                         <td style={{direction: "ltr"}}>
@@ -74,8 +69,6 @@ function PreviewStock(props){
                         
                     </tr>))}
                     <tr>
-                        <td></td>
-                        <td></td>
                         <td></td>
                         <td></td>
                         <td></td>

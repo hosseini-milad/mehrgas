@@ -40,17 +40,9 @@ const Header = (props)=>{
                         <a className="menuConvasItem" href="/category/essence">
                             محصولات
                         </a>
-                        <div className="menuConvasItem">
+                        <a className="menuConvasItem" href="/order">
                             سفارش آنلاین
-                            <div className="menuSubItems">
-                                <a className="menuSubItem" href="/order/stock">
-                                    عدسی سفارشی Stock
-                                </a>
-                                <a className="menuSubItem" href="/order/rx">
-                                    عدسی سفارشی RX
-                                </a>
-                            </div>
-                        </div>
+                        </a>
                         <a className="menuConvasItem" href="/quality">
                             گارانتی
                         </a>
@@ -114,23 +106,10 @@ const Header = (props)=>{
                     {/*<div style={{display:props.data&&megaMenu==="product"?"block":"none"}}>
                         <MegaMenuProduct data={props.data}/></div>*/}
                 </a></div>
-                <div className="menuItem" 
-                    onMouseOver={()=>setMegaMenu("order")}
-                    onMouseOut={()=>setMegaMenu("0")}>
+                <div className="menuItem">
+                    <a className="menuItem activeMenu" href="/order">
                     سفارش آنلاین
-                    <i className="mini-size fas fa-chevron-down"></i>
-                    <div className="megaHolder" style={{display:props.data&&megaMenu==="order"?"block":"none"}}>
-                        <div className="megaMenu">
-                            <div className="megaMenuHolder">
-                                <a className="megaMenuCol" href="/order/stock">
-                                    <span>عدسی های آماده (Stock)</span>
-                                </a>
-                                <a className="megaMenuCol" href="/order/rx">
-                                    <span>عدسی های سفارشی (RX)</span>
-                                </a>
-                            </div> 
-                        </div>   
-                    </div>
+                    </a>
                 </div>
                 <a className="menuItem" href="/quality">
                     گارانتی

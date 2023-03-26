@@ -70,10 +70,10 @@ function Stock(){
              <div className="orderStepsHolder">
                 <div className='innerSeprator'>
                     <div className={stockPreviewTab===0?'stockResultTab innerHeader':'innerHeader'} style={{left:"auto"}}
-                        onClick={()=>setStockPreviewTab(0)}>مشخصات عدسی</div>
-                    <div className={stockPreviewTab===1?'stockResultTab stockSecond innerHeader':'stockSecond innerHeader'} 
+                        onClick={()=>setStockPreviewTab(0)}>مشخصات کالا</div>
+                    {/*<div className={stockPreviewTab===1?'stockResultTab stockSecond innerHeader':'stockSecond innerHeader'} 
                         onClick={()=>setStockPreviewTab(1)}>سبد سفارشات {orderCount>0&&
-                            <small style={{backgroundColor:(orderCount%2)?"":"var(--main-color)"}}>{orderCount}</small>}</div>
+                        <small style={{backgroundColor:(orderCount%2)?"":"var(--main-color)"}}>{orderCount}</small>}</div>*/}
                     {stockPreviewTab===0?<>
                     {params&&<StockStep setTabIndex={setTabIndex} setOrderCount={setOrderCount} orderCount={orderCount}
                         setCount={setCount} setStockPopUp={setStockPopUp} setQuick={setQuick}

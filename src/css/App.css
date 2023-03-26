@@ -446,7 +446,29 @@ object-fit: cover;
     -webkit-box-orient: vertical;
     display: -webkit-box;
 }
-
+.carNo{
+    width: 200px;
+    margin-bottom: 10px;
+    direction: ltr;
+}
+.carNo input{
+    padding: 8px;
+}
+.carNo button{
+    width:100%;
+    margin-top: 10px;
+}
+.carNo .MuiInputLabel-outlined{
+    padding-top: 0px !important;
+    transform: translate(14px, 11px) scale(1);
+}
+.orderDesc{
+    padding: 0 20px;
+    width:100%;
+}
+.orderDesc .profileOrderList{
+width: 95%;
+}
 .pagesMain{
     margin:auto;
     max-width: 1500px;
@@ -2128,7 +2150,7 @@ border: 1px solid silver;
     justify-content: center;
 }
 .profileItem{
-    width:20%;
+    width:16%;
     color:var(--main-color);
     min-height: 60px;
     margin:1%;
@@ -2214,6 +2236,10 @@ border: 1px solid silver;
 }
 .rxButton{
     display: grid;
+}
+.secButton{
+    display: flex;
+    margin:20px 10px
 }
 .cancelBtn{
     border-color: red;
