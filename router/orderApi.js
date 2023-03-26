@@ -81,15 +81,8 @@ router.post('/stock/list',jsonParser,async (req,res)=>{
         lenzIndex:req.body.lenzIndex,
         material:req.body.material,
         coating:req.body.coating,
-        offset:req.body.page,
+        offset:req.body.page?req.body.page:0,
 
-        odSph:req.body.odSph,
-        odCyl:req.body.odCyl,
-        osSph:req.body.osSph,
-        osCyl:req.body.osCyl,
-        dia:req.body.dia,
-        add:req.body.add,
-        design:req.body.design,
         align:req.body.align,
         price:req.body.price,
         
@@ -107,25 +100,23 @@ router.post('/stock/list',jsonParser,async (req,res)=>{
         .find(data.design?{design:data.design}:{})
         .find(data.price?{price:{$gte: data.price[0]*10000, $lte: data.price[1]*10000}}:{})
         //.find(data.price?{price:{$gte: data.price[0]*10000, $lte: data.price[1]*10000}}:{})
-        .find(data.align?{align:data.align}:{})
-        const odStock = stockData.filter(item=>(data.odSph&&item.sph===data.odSph&&item.cyl===(data.odCyl?data.odCyl:"0.00")));
-        const osStock = stockData.filter(item=>(data.osSph&&item.sph===data.osSph&&item.cyl===(data.osCyl?data.osCyl:"0.00")));
-        const stockResult = reyhamConcat(osStock,odStock); 
-        const stockOffset = stockResult.slice(data.offset,data.offset+10)   
-     
-        //console.log(stockOffset)
-        const brandList = [...new Set(stockResult.map(item=>item.brandName))];
+        
+        const stockOffset = stockData.slice(data.offset,data.offset+10)   
+       
+        //console.log(data.offset)
+        const brandList = [...new Set(stockData.map(item=>item.brandName))];
         //const brandList = await ManSchema.distinct('brandName')
-        const lenzIndexList = [...new Set(stockResult.map(item=>item.lenzIndex))];
-        const materialList = [...new Set(stockResult.map(item=>item.material))];
-        const coatingList = [...new Set(stockResult.map(item=>item.coating))];
+        const lenzIndexList = [...new Set(stockData.map(item=>item.lenzIndex))];
+        const materialList = [...new Set(stockData.map(item=>item.material))];
+        const coatingList = [...new Set(stockData.map(item=>item.coating))];
         const designList = [...new Set(stockData.map(item=>item.design))];
         const alignList = [...new Set(stockData.map(item=>item.align))];
         
         
-        res.json({stock:stockOffset,stockOD:odStock,stockOS:osStock,
+        res.json({stock:stockOffset,
             brandList:brandList,lenzIndexList:lenzIndexList,
-            materialList:materialList,coatingList:coatingList,size:stockResult.length,
+            materialList:materialList,coatingList:coatingList,
+            size:stockData.length,
             alignList:alignList,designList:designList
         })
     }
@@ -239,6 +230,7 @@ router.post('/stock/add',jsonParser,async (req,res)=>{
     const data = {
         id:req.body.id,
         sku: req.body.sku,
+        hesabfa: req.body.sku,
         od: req.body.od,
         count:req.body.count,
         sph:req.body.sph,
@@ -793,7 +785,7 @@ router.get('/rxSeprate',jsonParser,async(req,res)=>{
 })
 router.get('/rxSeprateCustomer',jsonParser,async(req,res)=>{
     //console.log("rxSeprateCustomerApi")
-    try{
+    try{ 
         const rxDataInitial = await RXSchema.find({status:"initial",userId:ObjectID(req.headers["userid"])}).count();
         const rxDataInprogress = await RXSchema.find({status:"inprogress",userId:ObjectID(req.headers["userid"])}).count();
         const rxDataAccepted = await RXSchema.find({status:"accept",userId:ObjectID(req.headers["userid"])}).count();
@@ -854,15 +846,22 @@ router.get('/stockSeprate',jsonParser,async(req,res)=>{
         const userData = await userSchema.findOne({_id:req.headers['userid']})
         
         const stockDataInprogress = await OrdersSchema.find({status:"inprogress"}).count();
-        const stockDataDelivered = await OrdersSchema.find({status:"delivered"}).count();
-
+        const stockDataAccepted = await OrdersSchema.find({status:"accept"}).count();
+        //const stockDataDelivered = await OrdersSchema.find({status:"delivered"}).count();
+        const stockDataInVehicle = await OrdersSchema.find({status:"inVehicle"}).count();
+        const stockDataSaleControl = await OrdersSchema.find({status:"saleControl"}).count();
+        const stockDataOutVehicle = await OrdersSchema.find({status:"outVehicle"}).count();
+        
         const stockDataCompleted = await OrdersSchema.find({status:"completed"}).count();
         const stockDataCancel = await OrdersSchema.find({status:/cancel/}).count();
 
         
         //console.log(userData)
         res.json({stockDataInprogress:stockDataInprogress,
-            stockDataDelivered:stockDataDelivered,
+            stockDataAccepted:stockDataAccepted,
+            stockDataInVehicle:stockDataInVehicle,
+            stockDataSaleControl:stockDataSaleControl,
+            stockDataOutVehicle:stockDataOutVehicle,
             stockDataCompleted:stockDataCompleted,
             stockDataCancel:stockDataCancel,
         userInfo:userData})
@@ -876,12 +875,18 @@ router.get('/stockSeprateCustomer',jsonParser,async(req,res)=>{
     try{
         const stockDataInprogress = await OrdersSchema.find({status:"inprogress",userId:ObjectID(req.headers["userid"])}).count();
         const stockDataAccepted = await OrdersSchema.find({status:"accept",userId:ObjectID(req.headers["userid"])}).count();
+        const stockDataInVehicle = await OrdersSchema.find({status:"inVehicle",userId:ObjectID(req.headers["userid"])}).count();
+        const stockDataSaleControl = await OrdersSchema.find({status:"saleControl",userId:ObjectID(req.headers["userid"])}).count();
+        const stockDataOutVehicle = await OrdersSchema.find({status:"outVehicle",userId:ObjectID(req.headers["userid"])}).count();
         const stockDataCompleted = await OrdersSchema.find({status:"completed",userId:ObjectID(req.headers["userid"])}).count();
         const stockDataCancel = await OrdersSchema.find({status:/cancel/,userId:ObjectID(req.headers["userid"])}).count();
         
         //console.log(userData)
         res.json({stockDataInprogress:stockDataInprogress,
             stockDataAccepted:stockDataAccepted,
+            stockDataInVehicle:stockDataInVehicle,
+            stockDataSaleControl:stockDataSaleControl,
+            stockDataOutVehicle:stockDataOutVehicle,
             stockDataCompleted:stockDataCompleted,
             stockDataCancel:stockDataCancel})
     }
@@ -893,7 +898,9 @@ router.post('/stockSeprate/search',jsonParser,async(req,res)=>{
     //console.log("StockSeprateSearchApi")
     var pageSize = req.body.pageSize?req.body.pageSize:"10";
     const search = req.body.search?req.body.search:'';
-    try{
+    const all = req.body.all;
+    try{ 
+        if(search.length<5&&!all){res.json([]); return;}
         const stockData = req.body.userId?await 
          OrdersSchema.find({status:{$regex:req.body.status},
             stockOrderNo:{$regex: search},
@@ -1076,47 +1083,16 @@ router.post('/manage/addstock',jsonParser, auth,async (req,res)=>{
     try{
     const data = {
         status:req.body.status,
+        carNo:req.body.carNo,
+        description:req.body.description,
         progressDate: Date.now()
     } 
     const oldStockData = await OrdersSchema.findOne({stockOrderNo:req.body.stockOrderNo})
     const userData = await userSchema.findOne({_id:oldStockData.userId})
     //console.log(oldStockData)
     var stockData = ''
-    if(data.status ==="delivered"){
-        var items=[];
-        for(var index=0;index<oldStockData.stockFaktor.length;index++){
-            const pair =oldStockData.stockFaktor[index].align==="pair"?1:0;
-            var stockDetail = await sepidarstock.findOne(
-                {sku:(pair&&oldStockData.stockFaktor[index].sku)?
-                    oldStockData.stockFaktor[index].sku.split('|')[0]:
-                oldStockData.stockFaktor[index].sku})
-            //console.log(stockDetail)
-        items.push({
-            Description: (stockDetail&&stockDetail.title)+
-                " ("+oldStockData.stockFaktor[index].align+")",
-            productCode:oldStockData.stockFaktor[index].sku,
-            ItemCode: oldStockData.stockFaktor[index].hesabfa,
-            Unit: 'لنگه',
-            Discount:0,
-            Quantity: oldStockData.stockFaktor[index].count,
-            UnitPrice: oldStockData.stockFaktor[index].price,
-        })
-        
-    }
-        setFaktor = await HesabFaApiCall("/invoice/save",{invoice:{
-            Date: new Date(Date.now()),
-            DueDate: new Date(Date.now()),
-            ContactCode: userData.cCode&&userData.cCode.replace( /^\D+/g, ''),
-            ContactTitle: userData.cName,
-            Reference:oldStockData.stockOrderNo,
-            InvoiceType: 0,
-            Status: 2,
-            InvoiceItems: items
-        }})
-        stockData = setFaktor.Success&&await OrdersSchema.updateOne({
-            stockOrderNo:req.body.stockOrderNo},{$set:data})
-    }
-    stockData = data.status !=="delivered"&&await OrdersSchema.updateOne({
+    
+    stockData = await OrdersSchema.updateOne({
         stockOrderNo:req.body.stockOrderNo},{$set:data})
         res.json({stock:stockData,message:"update"})
     } 
@@ -1342,18 +1318,17 @@ router.post('/addCart', auth,async (req,res)=>{
 router.post('/removeCart', auth,async (req,res)=>{
     const data={
         userId: req.headers["userid"],
-        sku:req.body.sku,
-        align:req.body.align
+        sku:req.body.sku
     }
     var status='undone'
     try{
         const cartData = await Cart.findOne({ userId : ObjectID(req.headers["userid"]),
-             sku : data.sku, align:data.align} )
-        if(cartData&&data.sku&&data.align){
+             sku : data.sku} )
+        if(cartData&&data.sku){
             await Cart.deleteOne({_id:cartData._id})
             status="deleteCart"
         }
-        if(!data.sku&&!data.align){
+        if(!data.sku){
             await Cart.deleteMany({userId:data.userId})
             status="deleteAll"
         }

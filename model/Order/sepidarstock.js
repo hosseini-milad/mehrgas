@@ -8,7 +8,7 @@ const sepidarStockSchema = new mongoose.Schema({
   title: { type: String },
 
   sku:{ type: String , unique: true},
-  hesabfa:{type: String, unique: true},
+  hesabfa:{type: String},
 
   sph:{ type: String },
   cyl:{ type: String },

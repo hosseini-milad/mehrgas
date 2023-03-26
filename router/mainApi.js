@@ -3,6 +3,7 @@ const Product = require('../model/products/Product');
 const slideModel = require('../model/slider');
 const services = require('../model/services');
 const Posts = require('../model/products/Post');
+const OrdersSchema = require('../model/Order/orders');
 const brands = require('../model/brands/brand');
 const brandsSlider = require('../model/brands/brandsSlider');
 const brandsBanner = require('../model/brands/brandsBanner');
@@ -180,7 +181,7 @@ exports.reportApi = async(req,res)=>{
 
         isYesterday(inprogressLog[indx].date)&&(yesterdayOrder++)
     } */
-    const reportList = await RXSchema.aggregate([
+    const reportList = await OrdersSchema.aggregate([
         {$lookup:{
             from : "users", 
             localField: "userId", 
@@ -189,7 +190,7 @@ exports.reportApi = async(req,res)=>{
         }},
         { $match:req.body.userId?{userId:ObjectID(req.body.userId)}:{}},
     { $match:data.status?{status:new RegExp('.*' + data.status + '.*')}:{status:{$not:{$regex:/^initial.*/}}}},
-        { $match:data.orderNo?{rxOrderNo:new RegExp('.*' + data.orderNo + '.*')}:{}},
+        { $match:data.orderNo?{stockOrderNo:new RegExp('.*' + data.orderNo + '.*')}:{}},
         { $match:data.brand?{brand:data.brand}:{}},
         { $match:!data.orderNo?{date:{$gte:new Date(data.dateFrom)}}:{}},
         { $match:!data.orderNo?{date:{$lte:new Date(data.dateTo)}}:{}},
