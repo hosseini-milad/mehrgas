@@ -95,7 +95,7 @@ exports.loginApi=async(req,res)=>{
           title: "ثبت مشتری جدید",
           user: user._id, 
           phone: phone,
-          kind:"manager",
+          kind:"crm",
           description: "کاربر با نام کاربری "+phone+ "در سامانه ثبت نام کرده است",
           status: "unread",
           date:Date.now()
@@ -223,7 +223,7 @@ exports.sendOTPApi=async(req,res)=>{
         title: "ثبت مشتری جدید",
         user: newUser._id,
         phone: phone,
-        kind:"manager",
+        kind:"saleOTP",
         description: "کاربر با شماره تماس "+phone+ "در سامانه ثبت نام کرده است",
         status: "unread",
         date:Date.now()

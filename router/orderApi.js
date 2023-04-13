@@ -70,7 +70,7 @@ const reyhamConcat = (osArray,odArray) =>{
         }
     }
     return(result)
-}
+} 
 router.post('/stock/list',jsonParser,async (req,res)=>{
     //console.log("StockListApi")
     try{
@@ -119,6 +119,34 @@ router.post('/stock/list',jsonParser,async (req,res)=>{
             size:stockData.length,
             alignList:alignList,designList:designList
         })
+    }
+    catch(error){
+        res.status(500).json({message: error.message})
+    }
+})
+function isToday(date) {
+    if(!date) return false;
+    const today = new Date();
+    if (today.toDateString() === date.toDateString()) {
+      return true;
+    }
+    return false;
+  }
+router.post('/todayOrder',jsonParser,async (req,res)=>{
+    //console.log("StockListApi")
+    const data={
+        offset:req.body.page?req.body.page:0
+    } 
+    try{
+        var pageSize = req.body.pageSize?req.body.pageSize:"10";
+
+        const stockData = await OrdersSchema.find({status:"inVehicle"})
+        const todayData = stockData.filter(item=>isToday(item.loadDate))
+        //console.log(todayData)
+         
+        const stockOffset = todayData.slice(data.offset,data.offset+10)   
+       
+        res.json(stockOffset)
     }
     catch(error){
         res.status(500).json({message: error.message})
@@ -701,13 +729,14 @@ router.post('/addstock',jsonParser, auth,async (req,res)=>{
         stockFaktor:req.body.stockFaktor,
         stockFaktorOrg:req.body.stockFaktor,
         status:req.body.status,
-        date: Date.now()
+        date: Date.now(),
+        loadDate:new Date(req.body.loadDate)
     } 
-
+    console.log(data)
         const stockData = await OrdersSchema.create(data)//{_id:req.body.id},{$set:data})
-            res.json({stock:stockData,message:"order register"})
+        res.json({stock:stockData,message:"order register"})
 
-        
+    
     }
     catch(error){
         res.status(500).json({message: error.message})
@@ -1085,15 +1114,21 @@ router.post('/manage/addstock',jsonParser, auth,async (req,res)=>{
         status:req.body.status,
         carNo:req.body.carNo,
         description:req.body.description,
+        ghabzIn:req.body.ghabzIn,
+        ghabzOut:req.body.ghabzOut,
+        cert:req.body.cert,
         progressDate: Date.now()
     } 
+    const adminData = await userSchema.findOne({_id:req.headers["userid"]})
     const oldStockData = await OrdersSchema.findOne({stockOrderNo:req.body.stockOrderNo})
     const userData = await userSchema.findOne({_id:oldStockData.userId})
     //console.log(oldStockData)
     var stockData = ''
     
     stockData = await OrdersSchema.updateOne({
-        stockOrderNo:req.body.stockOrderNo},{$set:data})
+        stockOrderNo:req.body.stockOrderNo},{$set:data});
+    await orderLogSchema.create({status:data.status,rxOrderNo:req.body.stockOrderNo,
+        date:Date.now(),user:adminData.phone})
         res.json({stock:stockData,message:"update"})
     } 
     catch(error){

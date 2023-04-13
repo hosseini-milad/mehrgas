@@ -11,6 +11,7 @@ const XtraSchema = require('../model/products/xtra');
 const MirrorSchema = require('../model/products/mirror');
 const PagesSchema = require('../model/pages');
 const RXSchema = require('../model/Order/rx');
+const OrderSchema = require('../model/Order/orders');
 const PostSchema = require('../model/products/Post');
 const logSchema = require('../model/Params/logs')
 const orderLogSchema = require('../model/Params/logsOrder')
@@ -331,13 +332,13 @@ router.post('/log/update',async (req,res)=>{
 
 router.post('/orderlog',async (req,res)=>{
     //console.log("LogApi")
-    const orderData = await RXSchema.findOne({rxOrderNo:req.body.rxOrderNo})
+    const orderData = await OrderSchema.findOne({stockOrderNo:req.body.rxOrderNo})
     const userData = await user.findOne({_id:orderData.userId})
     //console.log(userData)
     try{
         const logsData = await orderLogSchema.find({rxOrderNo:req.body.rxOrderNo})
         res.json({log:logsData,user:userData})
-    }
+    } 
     catch(error){
         res.status(500).json({message: error.message})
     }
