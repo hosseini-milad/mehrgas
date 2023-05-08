@@ -8,11 +8,10 @@ const userSchema = new mongoose.Schema({
   email: { type: String },
   access:{
     type:String,
-    enum:["manager","factory","store","customer","shop","request"]
+    enum:["manager","sale","security","customer","shop","request"]
   },
   group: {
-    type:String,
-    enum:["groupA","groupB","groupC","groupD"]
+    type:String
   },
   credit: { type: String },
   token: { type: String },
@@ -21,7 +20,9 @@ const userSchema = new mongoose.Schema({
   mahiat: { type: String },
   activity: { type: String },
   phone1: { type: String },
-  fax: { type: String }
+  fax: { type: String },
+  state:{ type: String },
+  date:{ type: String },
 });
 
 module.exports = mongoose.model("user", userSchema);
