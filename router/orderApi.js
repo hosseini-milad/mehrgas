@@ -721,12 +721,14 @@ router.post('/addrx',jsonParser, auth,async (req,res)=>{
 })
 router.post('/addstock',jsonParser, auth,async (req,res)=>{
     //console.log("AddStockApi")
+    const fromUser = req.body.fromUser;
     try{
     const data = {
-        userId:req.headers["userid"],
+        userId:fromUser?fromUser:req.headers["userid"],
         stockOrderNo:req.body.stockOrderNo,
         stockOrderPrice:req.body.stockOrderPrice,
         stockFaktor:req.body.stockFaktor,
+        description:req.body.description,
         stockFaktorOrg:req.body.stockFaktor,
         status:req.body.status,
         date: Date.now(),
@@ -1060,11 +1062,11 @@ router.post('/manage/addrx',jsonParser, auth,async (req,res)=>{
         var rxData ={}
         if(data.status === "initial"){
             data = {...data, rxOrderNo:""}
-        }
+        } 
         if(data.status === "accept")
             userData&&await sendSmsUser(userData._id,process.env.acceptOrder,req.body.rxOrderNo,"rxOrder",data.status)
         if(data.status === "completed") 
-            userData&&await sendSmsUser(userData._id,process.env.sendOrder,req.body.rxOrderNo,"rxOrder",data.status)
+            //userData&&await sendSmsUser(userData._id,process.env.sendOrder,req.body.rxOrderNo,"rxOrder",data.status)
         if(data.status ==="delivered"){
             //console.log(userData.cCode)
             //console.log(findServices(rx,productCode,rx.totalDiscount))
