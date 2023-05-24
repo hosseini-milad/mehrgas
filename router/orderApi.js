@@ -734,7 +734,7 @@ router.post('/addstock',jsonParser, auth,async (req,res)=>{
         date: Date.now(),
         loadDate:new Date(req.body.loadDate)
     } 
-    console.log(data)
+    //console.log(data)
         const stockData = await OrdersSchema.create(data)//{_id:req.body.id},{$set:data})
         res.json({stock:stockData,message:"order register"})
 
@@ -1124,9 +1124,13 @@ router.post('/manage/addstock',jsonParser, auth,async (req,res)=>{
     const adminData = await userSchema.findOne({_id:req.headers["userid"]})
     const oldStockData = await OrdersSchema.findOne({stockOrderNo:req.body.stockOrderNo})
     const userData = await userSchema.findOne({_id:oldStockData.userId})
-    //console.log(oldStockData)
+    const ldDate =oldStockData.loadDate.toLocaleString('fa-IR', { timeZone: 'Asia/Tehran' })
     var stockData = ''
     
+    if(data.status==="inVehicle"){
+        const smsResult = await sendSmsUser(userData._id,process.env.acceptOrder,
+            req.body.stockOrderNo,ldDate.split(' ')[0],data.status)
+    }
     stockData = await OrdersSchema.updateOne({
         stockOrderNo:req.body.stockOrderNo},{$set:data});
     await orderLogSchema.create({status:data.status,rxOrderNo:req.body.stockOrderNo,

@@ -18,7 +18,7 @@ var storage = multer.diskStorage(
             cb( null, "mgm"+ '-' + Date.now()+ '-'+file.originalname);
         }
     }
-);
+); 
 const uploadImg = multer({ storage: storage })
 
 const fs = require('fs');

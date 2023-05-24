@@ -8,7 +8,7 @@ var api = Kavenegar.KavenegarApi({
 async function sendSmsUser(userId,template,message,token2,token3){
     const userData= await user.findOne({_id:userId});
     const userInfoData= await userInfo.findOne({userId: userId });
-    console.log(userId,userData,userInfoData)
+    //console.log(userId,userData,userInfoData)
     var phoneNumber=""
     if(userInfoData&&userInfoData.mobile){
       phoneNumber= userInfoData.mobile
@@ -16,14 +16,11 @@ async function sendSmsUser(userId,template,message,token2,token3){
     else{
       if(isMobile(userData.phone))phoneNumber=userData.phone;
     }
-    console.log({
-        token: message,
-        template: template,//"mgmVerify",
-        receptor: phoneNumber
-    })
-    if(0&&phoneNumber){
+    
+    if(phoneNumber){
       api.VerifyLookup({
-        token: message,
+        token: "",//message,
+        token2:token2,
         template: template,//"mgmVerify",
         receptor: phoneNumber
       },function(response,status) {
