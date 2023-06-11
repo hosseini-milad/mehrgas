@@ -72,36 +72,10 @@ exports.loginApi=async(req,res)=>{
       // Validate if user exist in our database
       const user = await User.findOne({phone: phone });
       if(!user){
-        encryptedPassword = await bcrypt.hash(password, 10);
-
-        // Create user in our database
-        const user = await User.create({
-          phone,
-          email:phone+"@mgmlenz.com",
-          password: encryptedPassword,
-        });
-        // Create token
-        const token = jwt.sign(
-          { user_id: user._id },
-          process.env.TOKEN_KEY,
-          {
-            expiresIn: "2h",
-          }
-        );
-        // save user token
-        user.token = token;
-
-        const newUserLog = await logSchema.create({
-          title: "ثبت مشتری جدید",
-          user: user._id, 
-          phone: phone,
-          kind:"crm",
-          description: "کاربر با نام کاربری "+phone+ "در سامانه ثبت نام کرده است",
-          status: "unread",
-          date:Date.now()
-        }) 
+        
         // return new user
-        res.status(201).json(user)
+        //res.status(201).json(user)
+        res.status(400).send("User Not Exists");
         return;
       }
 

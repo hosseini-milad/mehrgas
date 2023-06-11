@@ -135,15 +135,18 @@ function isToday(date) {
 router.post('/todayOrder',jsonParser,async (req,res)=>{
     //console.log("StockListApi")
     const data={
-        offset:req.body.page?req.body.page:0
+        offset:req.body.page?req.body.page:0,
+        userId:req.body.userId
     } 
     try{
         var pageSize = req.body.pageSize?req.body.pageSize:"10";
-
+        const userData = await userSchema.findOne({_id:data.userId})
+        //console.log(userData)
         const stockData = await OrdersSchema.find({status:"inVehicle"})
-        const todayData = stockData.filter(item=>isToday(item.loadDate))
+            .find({group:userData.group})
+        const todayData = stockData//.filter(item=>isToday(item.loadDate))
         //console.log(todayData)
-         
+        
         const stockOffset = todayData.slice(data.offset,data.offset+10)   
        
         res.json(stockOffset)
@@ -582,7 +585,7 @@ router.post('/addItem',jsonParser, auth,async (req,res)=>{
         
     }
     const totalPrice=SumPrices([price.extraPrice,price.lenzPrice,-price.totalDiscount]);
-    
+
         const existOrderItem = await OrdersSchema.find({_id:data.id});
         if(existOrderItem.length){
             const orderData = await OrdersSchema.updateOne({_id:data.id},{$set:data})
@@ -612,13 +615,13 @@ router.post('/updateItem',jsonParser, auth,async (req,res)=>{
 })
 
 const checkRep=async(userNo,dateYear)=>{
-    const newUserNo=userNo?parseInt(userNo%100):"00"
     var rxTemp = '';
     while(1){
-        const foundRx = rxTemp&&await RXSchema.findOne({rxOrderNo:rxTemp});
-        if(rxTemp&&!foundRx)break
-        else rxTemp="R"+faNumtoEn(dateYear[3])+newUserNo +
-            (Math.floor(Math.random() * 10000) + 10000)
+        
+        const foundRx = rxTemp&&await OrdersSchema.findOne({rxOrderNo:rxTemp});
+        if(rxTemp&&foundRx)break
+        else rxTemp=userNo+
+            (Math.floor(Math.random() * 1000000) + 100000)
     }
     return(rxTemp)
 
@@ -718,24 +721,31 @@ router.post('/addrx',jsonParser, auth,async (req,res)=>{
     catch(error){
         res.status(500).json({message: error.message})
     }
-})
+}) 
 router.post('/addstock',jsonParser, auth,async (req,res)=>{
     //console.log("AddStockApi")
     const fromUser = req.body.fromUser;
     try{
+        const orderNo = await checkRep(fromUser?"Mf":"Mc");
+       
     const data = {
         userId:fromUser?fromUser:req.headers["userid"],
-        stockOrderNo:req.body.stockOrderNo,
+        stockOrderNo:orderNo,
         stockOrderPrice:req.body.stockOrderPrice,
         stockFaktor:req.body.stockFaktor,
         description:req.body.description,
         stockFaktorOrg:req.body.stockFaktor,
         status:req.body.status,
         date: Date.now(),
-        loadDate:new Date(req.body.loadDate)
+        loadDate:new Date(req.body.loadDate),
+        loadDateOrg:new Date(req.body.loadDate)
     } 
+    const userData = await userSchema.findOne({_id:data.userId})
+    data.group = userData.group
     //console.log(data)
+    
         const stockData = await OrdersSchema.create(data)//{_id:req.body.id},{$set:data})
+        //await sendSmsUser(data.userId,process.env.regOrder,orderNo,"rxOrderNo",data.status)
         res.json({stock:stockData,message:"order register"})
 
     
@@ -931,13 +941,24 @@ router.post('/stockSeprate/search',jsonParser,async(req,res)=>{
     const search = req.body.search?req.body.search:'';
     const all = req.body.all;
     try{ 
+        console.log(search)
         if(search.length<5&&!all){res.json([]); return;}
+        const filterUser = await userSchema.find({cName:{$regex:search}})
+        
+        var userFilterList = [];
+        for(var i=0;i<filterUser.length;i++){
+            userFilterList[i]=ObjectID((filterUser[i]._id).toString())
+        }
+        //console.log(userFilterList)
         const stockData = req.body.userId?await 
          OrdersSchema.find({status:{$regex:req.body.status},
             stockOrderNo:{$regex: search},
             userId:ObjectID(req.body.userId)}):
-          await OrdersSchema.find({status:{$regex:req.body.status},
-            stockOrderNo:{$regex: search}})
+          await OrdersSchema.find({status:{$regex:req.body.status},})
+            //stockOrderNo:{$regex: search}})
+            .find(userFilterList?{userId:{$in:userFilterList}}:
+                {stockOrderNo:{$regex: search}})
+            .find({group:req.body.group})
         .skip(req.body.offset).limit(parseInt(pageSize))
         
         //console.log(userData)
@@ -1126,7 +1147,7 @@ router.post('/manage/addstock',jsonParser, auth,async (req,res)=>{
     const userData = await userSchema.findOne({_id:oldStockData.userId})
     const ldDate =oldStockData.loadDate.toLocaleString('fa-IR', { timeZone: 'Asia/Tehran' })
     var stockData = ''
-    
+     
     if(data.status==="inVehicle"){
         const smsResult = await sendSmsUser(userData._id,process.env.acceptOrder,
             req.body.stockOrderNo,ldDate.split(' ')[0],data.status)
@@ -1141,6 +1162,14 @@ router.post('/manage/addstock',jsonParser, auth,async (req,res)=>{
         res.status(500).json({message: error.message})
     }
 })
+const calcTotal= async(listArray)=>{
+    var totalPrice = 0;
+    for(var i=0;i<listArray.length;i++){
+        try{totalPrice+= parseInt(listArray[i].price) * parseInt(listArray[i].count)}
+        catch{}
+    }
+    return(totalPrice)
+}
 router.post('/manage/editstock',jsonParser, auth,async (req,res)=>{
     //console.log("ManageAddStockApi")
     try{
@@ -1151,13 +1180,13 @@ router.post('/manage/editstock',jsonParser, auth,async (req,res)=>{
     const oldStockData = await OrdersSchema.findOne({stockOrderNo:req.body.stockOrderNo})
     var stockFaktor = oldStockData.stockFaktor;
     //console.log(stockFaktor)
+    
     if(data.newItem){
         if(data.oldID){
             for(var index=0;index<stockFaktor.length;index++)
             {
                 if(stockFaktor[index].sku===data.oldID){
                     stockFaktor[index]=data.newItem
-                    console.log(data.newItem)
                     break
                 }
             } 
@@ -1176,11 +1205,13 @@ router.post('/manage/editstock',jsonParser, auth,async (req,res)=>{
             }
 
     }
+    const totalPrice = await calcTotal(stockFaktor)
     //console.log(stockFaktor)
     //const userData = await userSchema.findOne({_id:oldStockData.userId})
     //console.log(oldStockData)
     var stockData = await OrdersSchema.updateOne({
-        stockOrderNo:req.body.stockOrderNo},{$set:{stockFaktor:stockFaktor}})
+        stockOrderNo:req.body.stockOrderNo},
+        {$set:{stockFaktor:stockFaktor,stockOrderPrice:totalPrice}})
     const newStockData = await OrdersSchema.findOne({stockOrderNo:req.body.stockOrderNo})
         res.json({stock:newStockData,message:"update"})
     }
@@ -1188,6 +1219,21 @@ router.post('/manage/editstock',jsonParser, auth,async (req,res)=>{
         res.status(500).json({message: error.message})
     }
 })
+router.post('/manage/editDate',jsonParser, auth,async (req,res)=>{
+    //console.log("ManageAddStockApi")
+    try{
+    const data = {
+        loadDate:req.body.loadDate
+    } 
+    const oldStockData = await OrdersSchema.updateOne({stockOrderNo:req.body.stockOrderNo},
+        {$set:data})
+    res.json({stock:oldStockData,message:"update Date"})
+    }
+    catch(error){
+        res.status(500).json({message: error.message})
+    }
+})
+
 router.get('/manage/rxList',jsonParser,auth,async(req,res)=>{
     //console.log("ManagerRxListApi")
     try{
@@ -1421,9 +1467,9 @@ router.get('/getCart', auth,async (req,res)=>{
             foreignField: "sku", 
             as : "stockDetail"
         }}])
-    
+        
     res.json(cartOut)
-})
+}) 
 router.get('/cartside', async (req,res)=>{
     //console.log("CartSideApi")
     const transData = await transferMethod.find().sort({"sort":1});
