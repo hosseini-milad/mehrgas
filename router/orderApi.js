@@ -743,9 +743,9 @@ router.post('/addstock',jsonParser, auth,async (req,res)=>{
     const userData = await userSchema.findOne({_id:data.userId})
     data.group = userData.group
     //console.log(data)
-    
+
         const stockData = await OrdersSchema.create(data)//{_id:req.body.id},{$set:data})
-        //await sendSmsUser(data.userId,process.env.regOrder,orderNo,"rxOrderNo",data.status)
+        await sendSmsUser(data.userId,process.env.regOrder,orderNo,"rxOrderNo",data.status)
         res.json({stock:stockData,message:"order register"})
 
     
@@ -879,22 +879,24 @@ router.post('/rxSeprate/search',jsonParser,async(req,res)=>{
 })
 
 router.get('/stockSeprate',jsonParser,async(req,res)=>{
-    //console.log("StockSeprateApi")
+    //console.log("StockSeprateApi") 
     const access = req.body.access
     try{
     var time = (new Date(Date.now())).getHours();
         
         const userData = await userSchema.findOne({_id:req.headers['userid']})
-        
-        const stockDataInprogress = await OrdersSchema.find({status:"inprogress"}).count();
-        const stockDataAccepted = await OrdersSchema.find({status:"accept"}).count();
+        console.log(userData.group)
+        if(!userData)
+            res.status(500).json({message: "user not found"})
+        const stockDataInprogress = await OrdersSchema.find({status:"inprogress",group:userData.group}).count();
+        const stockDataAccepted = await OrdersSchema.find({status:"accept",group:userData.group}).count();
         //const stockDataDelivered = await OrdersSchema.find({status:"delivered"}).count();
-        const stockDataInVehicle = await OrdersSchema.find({status:"inVehicle"}).count();
-        const stockDataSaleControl = await OrdersSchema.find({status:"saleControl"}).count();
-        const stockDataOutVehicle = await OrdersSchema.find({status:"outVehicle"}).count();
+        const stockDataInVehicle = await OrdersSchema.find({status:"inVehicle",group:userData.group}).count();
+        const stockDataSaleControl = await OrdersSchema.find({status:"saleControl",group:userData.group}).count();
+        const stockDataOutVehicle = await OrdersSchema.find({status:"outVehicle",group:userData.group}).count();
         
-        const stockDataCompleted = await OrdersSchema.find({status:"completed"}).count();
-        const stockDataCancel = await OrdersSchema.find({status:/cancel/}).count();
+        const stockDataCompleted = await OrdersSchema.find({status:"completed",group:userData.group}).count();
+        const stockDataCancel = await OrdersSchema.find({status:/cancel/,group:userData.group}).count();
 
         
         //console.log(userData)
@@ -954,11 +956,11 @@ router.post('/stockSeprate/search',jsonParser,async(req,res)=>{
          OrdersSchema.find({status:{$regex:req.body.status},
             stockOrderNo:{$regex: search},
             userId:ObjectID(req.body.userId)}):
-          await OrdersSchema.find({status:{$regex:req.body.status},})
-            //stockOrderNo:{$regex: search}})
-            .find(userFilterList?{userId:{$in:userFilterList}}:
-                {stockOrderNo:{$regex: search}})
-            .find({group:req.body.group})
+          await OrdersSchema.find({status:{$regex:req.body.status},
+            stockOrderNo:{$regex: search}})
+            //.find(userFilterList.length&&{userId:{$in:userFilterList}})
+            //.find(search&&!userFilterList.length&&{stockOrderNo:{$regex: search}})
+            .find(req.body.group?{group:req.body.group}:{})
         .skip(req.body.offset).limit(parseInt(pageSize))
         
         //console.log(userData)
@@ -1151,8 +1153,14 @@ router.post('/manage/addstock',jsonParser, auth,async (req,res)=>{
     if(data.status==="inVehicle"){
         const smsResult = await sendSmsUser(userData._id,process.env.acceptOrder,
             req.body.stockOrderNo,ldDate.split(' ')[0],data.status)
+        //console.log("result:","smsResult")
     }
-    stockData = await OrdersSchema.updateOne({
+    if(data.status==="outVehicle"){
+        const smsResult = await sendSmsUser(userData._id,process.env.sendOrder,
+            req.body.stockOrderNo,"token2")
+        //console.log(smsResult)
+    }
+    stockData = 0&&await OrdersSchema.updateOne({
         stockOrderNo:req.body.stockOrderNo},{$set:data});
     await orderLogSchema.create({status:data.status,rxOrderNo:req.body.stockOrderNo,
         date:Date.now(),user:adminData.phone})

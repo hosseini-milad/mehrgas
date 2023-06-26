@@ -4,22 +4,22 @@ var Kavenegar = require('kavenegar');
 var api = Kavenegar.KavenegarApi({
     apikey: process.env.SMS_API
 });
-
+ 
 async function sendSmsUser(userId,template,message,token2,token3){
     const userData= await user.findOne({_id:userId});
     const userInfoData= await userInfo.findOne({userId: userId });
-    //console.log(userId,userData,userInfoData)
+    //console.log(userInfoData)
     var phoneNumber=""
     if(userInfoData&&userInfoData.mobile){
       phoneNumber= userInfoData.mobile
-    }
+    } 
     else{
       if(isMobile(userData.phone))phoneNumber=userData.phone;
     }
-    
+    //console.log((userId,template,message,token2,token3))
     if(phoneNumber){
       api.VerifyLookup({
-        token: "",//message,
+        token: message,//message,
         token2:token2,
         template: template,//"mgmVerify",
         receptor: phoneNumber
