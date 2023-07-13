@@ -745,7 +745,7 @@ router.post('/addstock',jsonParser, auth,async (req,res)=>{
     //console.log(data)
 
         const stockData = await OrdersSchema.create(data)//{_id:req.body.id},{$set:data})
-        await sendSmsUser(data.userId,process.env.regOrder,orderNo,"rxOrderNo",data.status)
+        await sendSmsUser(data.userId,process.env.regOrder,".","rxOrderNo",data.status)
         res.json({stock:stockData,message:"order register"})
 
     
@@ -1132,6 +1132,17 @@ router.post('/manage/addrx',jsonParser, auth,async (req,res)=>{
         res.status(500).json({message: error.message})
     }
 })
+const calcWeight=async(order)=>{
+    var totalWeight =  0;
+    for(var i = 0;i<order.stockFaktor.length;i++)
+    {
+        const skuFind = await sepidarstock.findOne({sku:order.stockFaktor[i].sku})
+        totalWeight+=(parseInt(skuFind.design.replace(/\D/g,''))*order.stockFaktor[i].count);
+        
+    }
+    //console.log(order)
+    return (totalWeight)
+}
 router.post('/manage/addstock',jsonParser, auth,async (req,res)=>{
     //console.log("ManageAddStockApi")
     try{
@@ -1148,19 +1159,22 @@ router.post('/manage/addstock',jsonParser, auth,async (req,res)=>{
     const oldStockData = await OrdersSchema.findOne({stockOrderNo:req.body.stockOrderNo})
     const userData = await userSchema.findOne({_id:oldStockData.userId})
     const ldDate =oldStockData.loadDate.toLocaleString('fa-IR', { timeZone: 'Asia/Tehran' })
+    
+    //await calcWeight(oldStockData)
     var stockData = ''
-     
+    try{ 
     if(data.status==="inVehicle"){
         const smsResult = await sendSmsUser(userData._id,process.env.acceptOrder,
-            req.body.stockOrderNo,ldDate.split(' ')[0],data.status)
+            req.body.stockOrderNo,ldDate.split(' ')[0],await calcWeight(oldStockData))
         //console.log("result:","smsResult")
     }
     if(data.status==="outVehicle"){
         const smsResult = await sendSmsUser(userData._id,process.env.sendOrder,
             req.body.stockOrderNo,"token2")
         //console.log(smsResult)
-    }
-    stockData = 0&&await OrdersSchema.updateOne({
+    } 
+}catch{}
+    stockData = await OrdersSchema.updateOne({
         stockOrderNo:req.body.stockOrderNo},{$set:data});
     await orderLogSchema.create({status:data.status,rxOrderNo:req.body.stockOrderNo,
         date:Date.now(),user:adminData.phone})
