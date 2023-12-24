@@ -8,7 +8,7 @@ function StockFaktor(props){
     const [sku,setSku] = useState('')
     const [align,setAlign] = useState("R")
     const [error,setError] = useState('')
-    //console.log(faktor)
+    console.log(faktor)
     useEffect(()=>{
         const postOptions={
             method:'get',
@@ -21,7 +21,7 @@ function StockFaktor(props){
             .then(res => res.json())
             .then(
               (result) => {
-                setFaktor(result)
+                setFaktor(result.cart)
               },
               (error) => {
                console.log({error:error.message});
@@ -118,6 +118,8 @@ function StockFaktor(props){
         );
     }
     const updateCount=(item,count)=>{
+      console.log(count)
+      setFaktor('')
         const postOptions={
             method:'post',
             headers: { 'Content-Type': 'application/json' ,
@@ -181,7 +183,7 @@ function StockFaktor(props){
     }
     return(
         <div className="tableHolder">
-          <table className="orderTable stockTable rtl">
+          {faktor&&<table className="orderTable stockTable rtl">
             <tbody>
                 <tr>
                     <th style={{width:"20px"}}>ردیف</th>
@@ -194,25 +196,19 @@ function StockFaktor(props){
                     <th>قیمت کل</th>
                     <th>حذف</th>
                 </tr>
-                {faktor&&faktor.map((faktorItem,i)=>(
+                {faktor&&faktor.cart.map((faktorItem,i)=>(
                     faktorItem.stockDetail&&faktorItem.stockDetail[0]&&
                 <tr key={i}>
                     <td onClick={()=>removeItem(faktorItem.sku)}>{i+1}</td>
                     <td >{faktorItem.sku}</td>
                     
-                    <td dangerouslySetInnerHTML={{__html:"<strong>"+faktorItem.stockDetail[0].brandName+"</strong>"+
-                        "-"+faktorItem.stockDetail[0].lenzIndex+"<br/>"+
-                        ""+faktorItem.stockDetail[0].material+"-"+
-                        (faktorItem.stockDetail[0].coating&&faktorItem.stockDetail[0].coating)}}>
-                    </td>
-                    <td dangerouslySetInnerHTML={{__html:
-                    (faktorItem.stockDetail[0].sph?"<strong>SPH: </strong>"+faktorItem.stockDetail[0].sph
-                        +" | <strong>CYL: </strong>"+faktorItem.stockDetail[0].cyl:'')}} style={{direction: "ltr"}}></td>
+                    <td >{faktorItem.title}</td>
+                    <td >{faktorItem.title}</td>
                     <td dangerouslySetInnerHTML={{__html:(`<strong>${faktorItem.align}</strong>`)}} style={{direction: "ltr"}}></td>
                     <td>{faktorItem.count&&<input className="stockCountInput orderTableInput" type="text" defaultValue={faktorItem.count} 
                         onChange={(e)=>updateCount(faktorItem,e.target.value)}/>}</td>
                     <td style={{direction: "ltr"}} dangerouslySetInnerHTML={{__html:
-                    (normalPrice(faktorItem.stockDetail[0].price))}}></td>
+                    (normalPrice(faktorItem.price))}}></td>
                     <td style={{direction: "ltr"}}dangerouslySetInnerHTML={{__html:
                         calcTotalPrice(faktorItem.stockDetail[0].price,faktorItem.count)}}></td>
                     <td className="deleteBtn" onClick={()=>removeItem(faktorItem)}>×</td>
@@ -224,7 +220,7 @@ function StockFaktor(props){
                     <td colSpan={3} style={{fontSize:"15px",fontWeight:"bold"}}>{normalPrice(totalPrice(faktor))} ریال</td>
                 </tr>
             </tbody>
-          </table>
+          </table>}
         <div className="orderContinue" style={{float: "none"}}>
             <input type="button" className="orderBtn" value="مشاهده سبد سفارشات" 
             style={{margin:"auto"}} onClick={()=>{props.setStockPopUp(0);props.setStockPreviewTab(1)}}/>

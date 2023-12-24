@@ -1,5 +1,5 @@
 :root{
-	--main-color:#002A54;
+	--main-color:#50774b;
 	--main-dark:rgb(48, 127, 226);
     --main-dark-light:rgb(88, 155, 237);
     --main-hover:#EC1616;
@@ -39,7 +39,7 @@ body {
     -webkit-border-radius: 1ex;
     -webkit-box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.75);
 }
-input , button{
+input , button, textarea{
     font-family: vazir; 
     background-color: #fff;
 }
@@ -56,7 +56,7 @@ header{
     display: grid;
     background-color: var(--header-back);
     box-shadow: 0px 3px 6px gray;
-    z-index: 20;
+    z-index: 1;
     position: absolute;
     height: 130px;
 }
@@ -289,9 +289,9 @@ hr{
 
 
 .collectionHolder{
-    background-color: var(--main-color);
     padding: 20px 10%;
     display: flex;
+    justify-content: space-around;
 }
 .collectionItem{
     width: 25%;
@@ -306,10 +306,12 @@ hr{
 .collectionImgHolder img{
     width:100%;
     margin: auto;
+    max-height: 175px;
+  object-fit: contain;
 }
 .collectionTextHolder{
     text-align: center;
-    color: var(--light-back);
+    color: #111;
 }
 .collectionTextHolder h3{
     margin:10px;
@@ -447,7 +449,7 @@ object-fit: cover;
     display: -webkit-box;
 }
 .carNo{
-    width: 200px;
+    width: 250px;
     margin-bottom: 10px;
     direction: ltr;
 }
@@ -468,6 +470,14 @@ object-fit: cover;
 }
 .orderDesc .profileOrderList{
 width: 95%;
+}
+.pelak{
+    display: flex;
+    align-items: baseline;
+}
+.pelak .MuiFormControl-root{
+    min-width: 55px;
+    margin: 2px;
 }
 .pagesMain{
     margin:auto;
@@ -752,6 +762,9 @@ margin-left: 10px;
     float: right;
     background-color: #fff;
 }
+.orderContinue .DatePicker{
+    margin:5%;
+}
 .previewContinue{
     display: flex;
     flex-wrap: wrap;
@@ -1011,7 +1024,6 @@ margin-left: 10px;
     display: flex;
     margin:20px auto;
     flex-wrap: wrap;
-    flex-direction: row-reverse;
 }
 .inRow{
     flex-wrap: nowrap;
@@ -1317,6 +1329,7 @@ border: 1px solid silver;
 }
 .orderTable{
     border:1px solid silver;
+    border-collapse: collapse;
     width: 100%;
     direction: ltr;
     align-items: baseline;
@@ -1883,6 +1896,7 @@ border: 1px solid silver;
 .topBtn span{
     padding: 5px 15px;
     border-radius: 5px;
+    min-width: 70px;
 }
 
 .loginTopBtn{
@@ -1916,6 +1930,11 @@ border: 1px solid silver;
     background-color:var(--light-back);
     cursor: pointer;
     
+}
+.phoneNumber{
+    margin-left: 10px;
+  color: #fff;
+  white-space: nowrap;
 }
 .loginFillBtn{
     background-color:var(--main-color) !important;
@@ -2004,6 +2023,7 @@ border: 1px solid silver;
     width: 120px;
     margin:auto 2%;
     cursor: pointer;
+    min-height: 100px;
 }
 .contactIcon img{
     position: relative;
@@ -2209,6 +2229,7 @@ border: 1px solid silver;
 .acceptBtn{
     border-color: green;
     border-radius: 5px;
+    margin:auto;
 }
 .editTable{
     border-color: orange;
@@ -2245,6 +2266,7 @@ border: 1px solid silver;
     border-color: red;
     border-radius: 5px;
     width:140px;
+    margin:auto;
 }
 .cancelBtnHolder{
     margin-top: 5px;
@@ -2530,7 +2552,13 @@ border: 1px solid silver;
     color: var(--tab-color);
     border-color: var(--tab-color);
 }
-
+.miniTable td{
+    font-size: 12px;
+}
+.miniTable input{
+    font-size: 12px;
+    max-width: 100px;
+}
 
 .alertHolder{
     position: fixed;
@@ -2658,6 +2686,11 @@ border: 1px solid silver;
     .blogHolder {display: grid;}
     .blogLarge { width: auto;}
     .blogList {width: 98%;}
+    
+.countStock{
+    width: 94%;
+    margin:20px 3% !important;
+}
     .mobileGrid{display: grid;}
     .mobileTbody{width: 100%;display: block;}
     .mobileGrid td{max-width: 100% !important}

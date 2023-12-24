@@ -4,8 +4,6 @@ import Alert from '../../Components/Alert';
 import env from '../../env';
 import DateDef from '../../ProfilePage/ProfileModules/DateDef'
 import OrderStatusMessage from '../../ProfilePage/ProfileModules/OrderStatusMessage';
-import FactoryHeader from '../ManagerAction/FactoryHeader';
-import ManageHeader from '../ManagerAction/ManageHeader';
 import ManageStockHeader from '../ManagerAction/ManageStockHeader';
 import StoreHeader from '../ManagerAction/StoreHeader';
 import ShopHeader from '../ManagerAction/ShopHeader';
@@ -14,16 +12,22 @@ import SimpleStockHeader from '../ManagerAction/SimpleStockHeader';
 
 function StockHeader(props){
     const orderData = props.orderData;
+    //console.log(orderData)
     persianDate.toCalendar('persian');
     const pDate = new persianDate(new Date(orderData.date)).format();
+    const oDate = orderData.loadDate?
+        new persianDate(new Date(orderData.loadDate)).format():'';
     const pWeek = new persianDate(new Date(orderData.date)).format('dddd');
+    const oWeek = orderData.loadDate?
+        new persianDate(new Date(orderData.loadDate)).format('dddd'):'';
+    
     const countDown = (new Date(orderData.date))-(new Date());
     //console.log(orderData)
     const [alertShow,setAlertShow] = useState(
         {show:false,action:0})
 
     //console.log(alertShow)
-    const changeOrderStatus=(status,reason)=>{
+    const changeOrderStatus=(status,reason,description,data)=>{
         //const acceptStatus = !reason&&window.confirm("تایید سفارش؟");
         const token = JSON.parse(localStorage.getItem('token-lenz'))
         const postOptions={
@@ -33,6 +37,7 @@ function StockHeader(props){
               'x-access-token':token&&token.token,
               'userId':token&&token.userId},
               body:JSON.stringify({stockOrderNo:orderData.stockOrderNo,
+                description:description,...data,
                 status:reason?status+"|"+reason+"|"+props.manager:status})
         }
         console.log(postOptions)
@@ -54,13 +59,16 @@ function StockHeader(props){
     }
     useEffect(() => {
         alertShow.action&&changeOrderStatus(
-            alertShow.status,alertShow.reason,alertShow.part)
+            alertShow.status,alertShow.reason,alertShow.description,alertShow.data)
     },[alertShow.action])
-
+    console.log(props.manager)
     return(<>
         <div className="orderHeaderTitle">
-            {!props.manager?<DateDef countDown={countDown} changeOrderStatus={changeOrderStatus}/>:
-            props.manager==="manager"?(<ManageStockHeader orderData={orderData} 
+            {props.manager==="customer"?
+            <DateDef countDown={countDown} changeOrderStatus={changeOrderStatus}
+            setAlertShow={setAlertShow} orderData={orderData} />:
+            (props.manager==="manager"||props.manager==="sale")?
+            (<ManageStockHeader orderData={orderData} 
                 changeOrderStatus={changeOrderStatus} setAlertShow={setAlertShow}/>):
             
             props.manager==="control"?(<ControlStockHeader orderData={orderData} 
@@ -74,14 +82,16 @@ function StockHeader(props){
             </small>}
             
             <OrderStatusMessage status={orderData.status} pWeek={pWeek} pDate={pDate.split(' ')[0].replaceAll('-','/')} 
-                user={props.userInfo} rawDate={pDate.split(' ')[1]}/>
+                user={props.userInfo} rawDate={pDate.split(' ')[1]} oWeek={oWeek}
+                orderDate={oDate?oDate.split(' ')[0].replaceAll('-','/'):''}/>
             <div style={{display:"grid"}}>
                 <small>شماره سفارش: {orderData.stockOrderNo}</small>
                 <div style={{display:"flex",justifyContent:"space-around"}}>
                     <button className='profileBtn' onClick={()=>props.setShowDetail((props.showDetail+1)%2)}>
                     {props.showDetail?"بستن جزئیات":"مشاهده جزئیات"}</button>
-                <button className='profileBtn' onClick={()=>window.open("/print/"+orderData.stockOrderNo,'_blank')}>
-                    {"چاپ سفارش"}</button></div>
+                    {(orderData.status==="completed"||orderData.status==="outVehicle")?
+                    <button className='profileBtn' onClick={()=>window.open("/print/"+orderData.stockOrderNo,'_blank')}>
+                    {"چاپ سفارش"}</button>:<></>}</div>
             </div>
         </div>
         {alertShow.show?<Alert data={alertShow} setAlertShow={setAlertShow}/>:''}

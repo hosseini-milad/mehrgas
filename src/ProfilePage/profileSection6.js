@@ -171,12 +171,12 @@ function ProfileSection6(props){
                 </div>
                 <div className="userDataHolder">
                     <div className="userData">
-                        <span>آدرس اصلی *</span>
+                        <span>کدملی *</span>
                         <strong>{userInfo&&userInfo.meliCode?userInfo.meliCode:
-                        props.user?props.user.activity:''}</strong>
+                        props.user?props.user.meli:''}</strong>
                     </div>
                     <div className="userIcon" onClick={()=>{
-                        setData({title:"آدرس اصلی",
+                        setData({title:"کدملی",
                         field:"meliCode",
                         value:userInfo&&userInfo.meliCode?userInfo.meliCode:
                             props.user?props.user.activity:''})
@@ -185,55 +185,7 @@ function ProfileSection6(props){
                         <i className="icon-size fas fa-edit"></i>
                     </div>
                 </div>
-                <div className="userDataHolder">
-                    <div className="userData">
-                        <span>تلفن ثابت</span>
-                        <strong>{userInfo&&userInfo.email}</strong>
-                    </div>
-                    <div className="userIcon" onClick={()=>{
-                        setData({
-                            title:"تلفن ثابت",
-                            field:"email",
-                            value:userInfo&&userInfo.email
-                        })
-                        setPop(1)}}>
-                        <span>ویرایش</span>
-                        <i className="icon-size fas fa-edit"></i>
-                    </div>
-                </div>
-                
-                <div className="userDataHolder">
-                    <div className="userData">
-                        <span>بازگرداندن پول من</span>
-                    </div>
-                    <div className="userIcon" onClick={()=>{
-                        setData({
-                            title:"ثبت شماره حساب",
-                            field:"hesab",
-                            value:userInfo&&userInfo.hesab
-                        })
-                        setPop(1)}}>
-                        <span>ثبت شماره حساب</span>
-                        <i className="icon-size fas fa-plus"></i>
-                    </div>
-                </div>
-                <div className="userDataHolder">
-                    <div className="userData">
-                        <span>شغل</span>
-                        <strong>{userInfo&&userInfo.job}</strong>
-                    </div>
-                    <div className="userIcon" onClick={()=>{
-                        setData({
-                            title:"شغل",
-                            field:"job",
-                            options:props.jobData,
-                            value:userInfo&&userInfo.job
-                        })
-                        setPop(2)}}>
-                        <span>ویرایش</span>
-                        <i className="icon-size fas fa-edit"></i>
-                    </div>
-                </div>
+                                
             </div>
             {alertShow.show?<SimpleAlert setAlertShow={setAlertShow}
                  data={

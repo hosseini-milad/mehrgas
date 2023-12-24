@@ -60,7 +60,7 @@ function Stock(){
     })
     window.scrollTo(0, 110);
     },[stockItem])
-    if(token&&(token.access==="manager"||token.access==="customer"))
+    if(token&&(token.access==="manager"||token.access==="customer"||token.access==="sale"))
     return(
     <main className="pagesMain">
        <div className="mainOrder"> 
@@ -94,6 +94,7 @@ function Stock(){
     </main>
     )
     else
-    return(<main style={{padding:"200px 20px",textAlign:"center"}}><h2>به زودی</h2></main>)
+    return(<main>
+        <HelpOrder /></main>)
 }
 export default Stock

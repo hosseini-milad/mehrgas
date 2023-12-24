@@ -13,17 +13,8 @@ function Home(){
     return(
         <main>
         <Slider mainSlider = {mainPage.slider}/>
-        {mainPage&&mainPage.brandSlider.length&&<HomeCatSlider brandSlider = {mainPage.brandSlider}/>}
         <Collection />
-        <div className="titles">
-            <h2>پرفروش ترین محصولات</h2>
-        </div>
-        <SalesHome />
         {mainPage&&<Services services = {mainPage.services}/>}
-        <div className="titles">
-            <h2>مجله MGM</h2>
-        </div>
-        {mainPage&&mainPage.posts.length&&<BlogHome posts={mainPage.posts}/>}
         </main>
     )
 }

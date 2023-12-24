@@ -3,7 +3,7 @@ import SimpleFetch from '../Components/simpleFetch';
 import env from '../env';
 
 function ContactUs(){
-    const contactOption=["مسئول فنی","واحد پشتیبانی","واتساپ","تلگرام","اینستاگرام"]
+    const contactOption=[" "]//"مسئول فنی","واحد پشتیبانی","واتساپ","تلگرام","اینستاگرام"]
     const contactRaw = SimpleFetch(env.siteApi+"/product/pages");
     console.log(contactRaw)
     return(
@@ -24,8 +24,9 @@ function ContactUs(){
             <div className="contactIconHolder">
                 {contactOption.map((contactIcon,i)=>(
                 <div className="contactIcon" key={i}>
-                    <img src="/img/Polygon.png" alt="contact" />
+                    {/*<img src="/img/Polygon.png" alt="contact" />*/}
                     <span className="iconText">{contactIcon}</span>
+
                 </div>
                 ))}
             </div>

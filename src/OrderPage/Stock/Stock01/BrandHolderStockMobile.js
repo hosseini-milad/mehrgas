@@ -65,7 +65,7 @@ function BrandHolderStockMobile(props){
                     style={{ width: "100%"}}
                     value={props.brandFilter.brandName||''}
                     onValueChange={(data)=>updateQuery("brandName",data)}
-                    label="Brand" 
+                    label="برند" 
                 />}
             </div>
             <div className='lenzData'>
@@ -75,7 +75,7 @@ function BrandHolderStockMobile(props){
                     style={{ width: "100%"}}
                     onValueChange={(data)=>updateQuery("lenzIndex",data)}
                     value={props.brandFilter.lenzIndex|| null}
-                    label="Lens Index"
+                    label="نوع کالا"
                 />}
             </div>
             <div className='lenzData'>
@@ -85,7 +85,7 @@ function BrandHolderStockMobile(props){
                     style={{ width: "100%"}}
                     onValueChange={(data)=>updateQuery("material",data)}
                     value={props.brandFilter.material|| null}
-                    label="Material"
+                    label="حجم کالا"
                 />}
             </div>
             <div className='lenzData'>
@@ -95,7 +95,7 @@ function BrandHolderStockMobile(props){
                     style={{ width: "100%"}}
                     onValueChange={(data)=>updateQuery("coating",data)}
                     value={props.brandFilter.coating|| null}
-                    label="Coating"
+                    label="جنس بدنه"
                 />}
                 </div>
         </div>

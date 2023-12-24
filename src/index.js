@@ -17,7 +17,7 @@ import Cart from './pages/Cart';
 import Login from './pages/Login';
 import ContactUs from './pages/ContactUs';
 import AboutUs from './pages/AboutUs';
-import Quality from './pages/Quality';
+import Services from './pages/Services';
 import Stock from './pages/Stock';
 import Profile from './pages/Profile';
 import Blog from './pages/Blog';
@@ -58,7 +58,7 @@ root.render(
 
         <Route path="/contact" element={<ContactUs/>}/>
         <Route path="/about" element={<AboutUs/>}/>
-        <Route path="/quality" element={<Quality/>}/>
+        <Route path="/services" element={<Services/>}/>
         <Route path="/setting/:optionId" element={<OptionPage/>} />
         <Route path="/edit-product/:optionId" element={<ProductEdit/>} />
         <Route path="/print/:orderId" element={<PrintArea/>}/>

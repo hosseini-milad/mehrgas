@@ -41,7 +41,6 @@ function StockStep(props){
       .then(res => res.json())
       .then(
         (result) => {
-            console.log(result)
             setContent('')
             //if(result.size===1)saveCart
             setTimeout(()=> setContent(result),200)
@@ -51,26 +50,7 @@ function StockStep(props){
         }
         
     )},[brandFilter,mainValue,mainLeft])
-    useEffect(() => {
-        const postOptions={
-            method:'get',
-            headers: { 'Content-Type': 'application/json' ,
-            "x-access-token": token&&token.token,
-            "userId":token&&token.userId}
-          }
-          //console.log(postOptions)
-          fetch(env.siteApi+"/order/getCart",postOptions)
-            .then(res => res.json())
-            .then(
-              (result) => {
-                setFaktor(result)
-                props.setOrderCount(result.length)
-              },
-              (error) => {
-               console.log({error:error.message});
-              }
-        );
-    },[props.orderCount])
+    
     //console.log(mainValue)
     return(<>
         <div className='stockMainHolder' style={{display:"grid"}}>
@@ -79,50 +59,16 @@ function StockStep(props){
                 {wWidth>700?<BrandHolderStock setBrandFilter={setBrandFilter} brandFilter={brandFilter}
                     content = {content}/>:
                     <BrandHolderStockMobile setBrandFilter={setBrandFilter} brandFilter={brandFilter}/>}
-                
+
                     <TextField label="تعداد" variant="outlined" value={count}
-                    onChange={(e)=>setCount(e.target.value)}/>
+                    onChange={(e)=>setCount(e.target.value)} className="countStock"/>
             </div>
             <StockResult setStockItem={props.setStockItem} 
-                content={content} count={count}
+                content={content} count={count} setBrandFilter={setBrandFilter}
                 orderCount={props.orderCount} setOrderCount={props.setOrderCount}/>
         </div>
-        <StockFaktorPreview faktor={faktor} setFaktor={setFaktor} //setCount={setCount}
-                        //setStockItem={setStockItem} setQuick={setQuick} 
-                        setOrderCount={props.setOrderCount} orderCount={props.orderCount}/>
-        {/*<div className='quickCart'>
-            {props.faktor&&<table className="orderTable stockTable">
-                    <tbody>
-                        <tr>
-                            <th>جهت</th>
-                            <th>SPH</th>
-                            <th>CYL</th>
-                            <th>برند</th>
-                            <th>تعداد</th>
-                        </tr>
-                        {props.faktor.map((faktorItem,i)=>(
-                            <tr key={i}>
-                                <td>{faktorItem.align}</td>
-                                <td style={{direction:"ltr"}}>{faktorItem.stockDetail[0].sph}</td>
-                                <td style={{direction:"ltr"}}>{faktorItem.stockDetail[0].cyl}</td>
-                                <td dangerouslySetInnerHTML={{__html:"<strong>"+faktorItem.stockDetail[0].brandName+"</strong>"}}>
-                                </td> 
-                                <td>{faktorItem.count}</td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>}
-            </div>
-        <StockResult setTabIndex={props.setTabIndex}
-            style={{display:eyeSelect[0]===1?"block":"none"}}
-            setStockItem={props.setStockItem}
-            setStockPopUp={props.setStockPopUp}
-            price={price} priceFilter={priceFilter}
-            mainValue={mainValue} mainLeft={mainLeft}
-            count={odCount} setCount={props.setCount}
-            stockFilter={brandFilter} setQuick={props.setQuick}
-            orderCount={props.orderCount} setOrderCount={props.setOrderCount}/>
-                        */}
+        <StockFaktorPreview />
+        
         </>
     )
 }

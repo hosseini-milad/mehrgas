@@ -27,12 +27,16 @@ var tempCounter = !tempCounter&&props.countDown;
     function padTo2Digits(num) {
         return num.toString().padStart(2, '0');
       }
+    const order = props.orderData
     return(
         <>
-        <button onClick={()=>props.changeOrderStatus("initial")} className='editOrderButton'>ویرایش </button>
-            {/*sec>0?<button onClick={()=>props.changeOrderStatus("initial")} className='editOrderButton'>ویرایش <i>{msToTime(sec)}</i></button>:
-            <button disabled className='editOrderButton'>ویرایش </button>*/}   
-            
+        {   (order.status==="inprogress"||order.status==="inVehicle"||
+        order.status==="saleControl")?
+            <button onClick={()=>props.setAlertShow(pState => {
+                    return { ...pState, show: true,title:"لغو سفارش",text:"دلیل لغو سفارش را ذکر کنید:",
+                part:"کارخانه", status:"cancel",reason:"دلیل لغو" }
+                    })} className='cancelBtnHolder cancelBtn'>لغو سفارش</button>   
+            :<></>    }
         </>
     )
 }

@@ -3,7 +3,7 @@ function Services(props){
     const service = props.services;
     return(
         <div className="servicesHolder">
-            <img className="serviceImg" src="/img/services.webp" alt="services" />
+            <img className="serviceImg" src="/img/services.jpeg" alt="services" />
             <div className="serviceTextHolder">
                 <h2>ویژگی و خدمات</h2>
                 <div className="serviceText">

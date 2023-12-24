@@ -1,11 +1,11 @@
 const env={
-    //siteApi:'http://localhost:4000/api',
-    //siteApi:'https://orderadmin.deleves.com/api',
-    siteApi:'https://admin.mgmlens.com/api',
+    siteApi:'http://localhost:4000/api',
+    //siteApi:'https://panel.mehrgaz.com/api',
+    //siteApi:'https://test.mehrgaz.com/api',
     
-    //siteApiUrl:'http://localhost:4000',
-    //siteApiUrl:'https://orderadmin.deleves.com',
-    siteApiUrl:'https://admin.mgmlens.com',
+    siteApiUrl:'http://localhost:4000',
+    //siteApiUrl:'https://panel.mehrgaz.com',
+    //siteApiUrl:'https://test.mehrgaz.com',
  
     loader:<img className="imgLoader" src="/img/loaderMGM.gif"/>,
     touch:<img className="touchLoader" src="/img/loaderMGM.gif"/>,
@@ -29,6 +29,17 @@ export function normalPrice(priceText,xtra){
     return(
       (rawPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",").replace( /^\D+/g, '')+(xtra?xtra:''))
     )
+}
+export function normalPriceCount(priceText,count){
+  if(!priceText||priceText === null||priceText === undefined) return("")
+  
+  try{priceText =priceText.split(' ')[0];}catch{}
+  if(priceText === "0"||priceText === 0)return("رایگان");
+  var rawPrice = parseInt(priceText.toString().replace(/\D/g,''))*count
+  //console.log(rawPrice,priceText)
+  return(
+    (rawPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",").replace( /^\D+/g, ''))
+  )
 }
 export function purePrice(priceText){
   if(!priceText)return(0)
@@ -163,14 +174,10 @@ export const orderStatus=(e)=>{
   if(e==="initial")return("در حال ثبت")
   if(e==="inprogress")return("ثبت شده")
   if(e==="accept")return("تایید شده")
-  if(e==="inproduction")return("در حال تولید")
-  if(e==="faktor")return("تولید شده")
-  if(e==="sending")return("ارسال از کارخانه")
+  if(e==="outVehicle")return("درب خروج")
   if(e==="inVehicle")return("درب ورود")
-  if(e==="delivered")return("تحویل به انبار")
-  if(e===/suspend/)return("معلق")
-  if(e==="shop")return("فروشگاه")
-  if(e==="storeSent")return("ارسال به فروشگاه")
+  if(e==="saleControl")return("کنترل")
+  if(e==="suspend")return("معلق")
   if(e==="completed")return("ارسال به مشتری")
   if(e==="cancel")return("انصراف")
   else return(e)
@@ -179,14 +186,10 @@ export const orderStatusRev=(e)=>{
   if(e==="در حال ثبت")return("initial")
   if(e==="ثبت شده")return("inprogress")
   if(e==="تایید شده")return("accept")
-  if(e==="در حال تولید")return("inproduction")
-  if(e==="تولید شده")return("faktor")
   if(e==="معلق")return("suspend")
-  if(e==="ارسال از کارخانه")return("sending")
-  if(e==="ارسال از فروشگاه")return("storeSent")
+  if(e==="درب خروج")return("outVehicle")
   if(e==="درب ورود")return("inVehicle")
-  if(e==="تحویل به انبار")return("delivered")
-  if(e==="فروشگاه")return("shop")
+  if(e==="کنترل")return("saleControl")
   if(e==="ارسال به مشتری")return("completed")
   if(e==="انصراف")return("cancel")
   
@@ -238,3 +241,7 @@ export function jalali_to_gregorian(jy, jm, jd) {
   return [gy, gm, gd];
 }
 
+export const pelakOpt=()=>{
+  return([ 'الف','ب','ت','ث','ج','د','ز','س','ش','ص','ط','ع','ف','ق','ک','گ','ل','م','ن','و','ه','ی','معلولین']
+  )
+}

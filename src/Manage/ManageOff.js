@@ -110,8 +110,35 @@ function ManageOffers(){
           })
         }
     }
-    //console.log(manResult)
-    const options=["عملیات","کد مشتری","دسترسی","گروه","نام مشتری","تخفیف"];
+    console.log(content)
+    const changeMobile=(e,user)=>{
+        if(e.key==='Enter'){
+        const postOptions={
+            method:'post',
+            headers: {'Content-Type': 'application/json',
+            userid:token&&token.userId,
+            "x-access-token":token&&token.token
+        },
+            body:JSON.stringify({
+                userName:user.userName,
+                phone:user.phone,
+                userId:user._id,
+                mobile:e.target.value
+            })
+          }
+          console.log(postOptions)
+       fetch(env.siteApi + "/auth/userInfo/set",postOptions)
+      .then(res => res.json())
+      .then(
+        (result) => {
+          console.log(result)
+        },
+        (error) => {
+          console.log(error);
+        })
+    }
+    }
+    const options=["عملیات","موبایل","کد مشتری","دسترسی","گروه","نام مشتری","تخفیف"];
         //"تعداد خرید","متوسط قیمت", "آخرین خرید"
     const optionsOffer=["ردیف","عملیات","مشتری","درصد تخفیف"
         ,"نام برند"];
@@ -154,17 +181,22 @@ function ManageOffers(){
                     <TextField {...params} />}
                 />
             </div>
-        <table className="orderTable stockTable rtl">
+        <table className="orderTable stockTable rtl miniTable">
             <tbody>
                 <tr> 
                     {options.map((th,i)=>(
                     <th key={i}>{th}</th>))}
                 </tr>
-                {content&&content.customers.map((manItem,i)=>(
+                {content&&content.totalUser.map((manItem,i)=>(
                     //console.log(manItem)||
                 <tr key={i} onClick={()=>{}}>
                     <td className="saveManager" width="60">
                         <a href={"/customer/"+manItem.phone}>مشاهده</a></td>
+                        
+                    <td>
+                    <TextField defaultValue={(manItem.userDetail&&manItem.userDetail[0])?
+                    manItem.userDetail[0].mobile:''} onKeyDown={(e)=>
+                    changeMobile(e,manItem)}/></td>
                     <td width="80">{manItem&&manItem.phone}</td>
                     <td width="80">
                         <Autocomplete
@@ -179,7 +211,7 @@ function ManageOffers(){
                     <td>
                         <Autocomplete
                         options={removeNull(content.userGroup)||[]} 
-                        freeSolo
+                        disableClearable freeSolo
                         style={{direction:"rtl"}}
                         defaultValue={manItem.group}
                         onChange={(_event, Group)=>{EditUser({group:Group},manItem._id)}}

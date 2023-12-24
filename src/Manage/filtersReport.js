@@ -55,9 +55,8 @@ function FiltersReport(props){
                  label="شماره سفارش"/>
             {wWidth>700?<Autocomplete
                 options={["در حال ثبت","ثبت شده","تایید شده",
-                "در حال تولید","تولید شده","ارسال از کارخانه",
-                "معلق","تحویل به انبار",
-                "ارسال به فروشگاه","ارسال به مشتری","انصراف"]} 
+                "درب خروج","درب ورود","کنترل","ارسال به مشتری","انصراف"
+                ]} 
                 freeSolo
                 style={{ width: "100%"}}
                 onChange={(_event, Value)=>props.setManResult(pState => 

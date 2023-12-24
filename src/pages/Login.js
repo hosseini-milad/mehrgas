@@ -10,7 +10,7 @@ function Login(){
     const [error,setError] = useState('');
     const [passLogin,setPassLogin] = useState('');
     const [phoneNumber,setPhoneNumber] = useState(userName?userName.phone:'');
-    const[fill,setFill] = useState(phoneNumber&&(phoneNumber.length>10)?1:0);
+    const[fill,setFill] = useState(phoneNumber&&(phoneNumber.length>5)?1:0);
   
     useEffect(()=>{
       if(otpCode.length===4)checkOTP()
@@ -82,7 +82,7 @@ function Login(){
       }
     const changePhone=(e)=>{
         setPhoneNumber(e.value)
-        if(e.value.length>10)
+        if(e.value.length>5)
             setFill(1)
         else
             fill&&setFill(0)
@@ -107,30 +107,42 @@ function Login(){
         .then(res => res.json())
         .then(
           (result) => {
+            if(result.error){
+            setError({errorText:result.error,
+              errorColor:"red"});
+              return
+            }
+            else{
+
+//console.log(result)
+localStorage.setItem('token-lenz',JSON.stringify(
+  {"token":result.token,
+  "mobile":phoneNumber,
+  "access":result.access,
+  "group":result.group,
+  "userId":result._id}));
+  localStorage.setItem('lenz-login',JSON.stringify(
+    {phone:phoneNumber,date:Date.now()}));
+setError({errorText:"با موفقیت وارد سایت شدید",
+        errorColor:"green"});
+  setTimeout(()=>document.location.pathname==="/login"?
+    (result.access==="customer"?document.location.href="/profile":
+     (!result.access?document.location.href="/profile#account":
+      document.location.href="/manager")):
+     document.location.reload(),1500);
+
+            }
           },
           (error) => {
-            setError({errorText:"رمز عبور اشتباه است",
+            setError({errorText:error.error,
                     errorColor:"red"});
+            
           }
         )
-            //console.log(result)
-            localStorage.setItem('token-lenz',JSON.stringify(
-              {"token":result.token,
-              "mobile":phoneNumber,
-              "access":result.access,
-              "userId":result._id}));
-              localStorage.setItem('lenz-login',JSON.stringify(
-                {phone:phoneNumber,date:Date.now()}));
-          setError({errorText:"با موفقیت وارد سایت شدید",
-                    errorColor:"green"});
-              setTimeout(()=>document.location.pathname==="/login"?
-                (result.access==="customer"?document.location.href="/profile":
-                 (!result.access?document.location.href="/profile#account":
-                  document.location.href="/manager")):
-                 document.location.reload(),1500);
+            
           },
           (error) => {
-            setError({errorText:"رمز عبور اشتباه است",
+            setError({errorText:error.error ,
                     errorColor:"red"});
           }
         )

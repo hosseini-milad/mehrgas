@@ -86,9 +86,10 @@ function StockPreview(props){
             <table className="orderTable" style={{marginTop:"8px"}}>
                 <tbody>
                     <tr style={{height:"70px",textAlign:"right",padding:"10px"}}>
-                        <td><span>
-                            توضیحات تکمیلی {defData&&defData.description}
-                        </span></td>
+                        <td><span style={{textAlign:"right",direction:"rtl"}}
+                        dangerouslySetInnerHTML={{__html:
+                            defData&&defData.description?defData.description:"توضیحات"
+                        }}/></td>
                     </tr>
                 </tbody>
             </table>

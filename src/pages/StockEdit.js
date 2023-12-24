@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
-import env from "../env";
+import env, { gregorian_to_jalali, jalali_to_gregorian } from "../env";
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { TextField } from "@material-ui/core"
 import BrandHolderStock from "../OrderPage/Stock/Stock01/BrandHolderStock";
 import StockRow from "../OrderPage/Stock/Stock02/StockRow";
+import DatePicker, { utils } from "react-modern-calendar-datepicker";
 var token = JSON.parse(localStorage.getItem('token-lenz'));
 
 function StockEdit(){
@@ -20,8 +21,8 @@ function StockEdit(){
     const [align,setAlign] = useState("R")
     const [count,setCount] = useState("1")
     const [error,setError] = useState("1")
-    
-    //console.log(editItemData)
+    const [date,setDate] = useState('')
+    //console.log(date)
     useEffect(() => {
         const body={
             search:stockId,
@@ -37,8 +38,13 @@ function StockEdit(){
       .then(res => res.json())
       .then(
         (result) => {
-            if(result.length)
-            {setContent(result[0])
+            
+            if(result.length){
+             const loadDate = new Date(result[0].loadDate)
+                setContent(result[0])
+                const dateFormat =gregorian_to_jalali(loadDate.getFullYear(),
+                    loadDate.getUTCMonth()+1,loadDate.getDate()) 
+                setDate({day:dateFormat[2],month:dateFormat[1],year:dateFormat[0]})   
                 setStockFaktor(result[0].stockFaktor)}
 
         },
@@ -47,7 +53,7 @@ function StockEdit(){
         }
         
     )},[])
-    useEffect(() => {
+    useEffect(() => { 
         //console.log(editItemData)
         if(editItemData.align)setAlign(editItemData.align)
         if(editItemData.count)setCount(editItemData.count)
@@ -75,7 +81,6 @@ function StockEdit(){
       .then(
         (result) => {
             setBrandContent('')
-            console.log(result)
             //if(result.size===1)saveCart
             setNewItem(result.size === 1?
             result.stock[0]:'')
@@ -114,6 +119,35 @@ function StockEdit(){
         (error) => {
           console.log(error);
         })
+    }
+    const updateDate=(newDate,reload)=>{
+        const body={
+            loadDate:new Date(newDate),
+            stockOrderNo:stockId
+        }
+        const postOptions={
+            method:'post',
+            headers: { 'Content-Type': 'application/json' ,
+                "x-access-token": token&&token.token,
+                "userId":token&&token.userId},
+            body:JSON.stringify(body)
+          }
+        console.log(postOptions)
+       fetch(env.siteApi + "/order/manage/editDate",postOptions)
+      .then(res => res.json())
+      .then(
+        (result) => {
+            console.log(result)
+            reload&&setTimeout(()=>window.location.reload(),500)
+        },
+        (error) => {
+          console.log(error);
+        })
+    }
+    const updateDateFunction=(date)=>{
+        updateDate(jalali_to_gregorian(date.year,date.month,date.day),1)
+        setDate(date)
+        
     }
     const updateStatus=(status)=>{
         
@@ -217,6 +251,16 @@ function StockEdit(){
                     ))}
             </tbody>
         </table>
+        <div className="changeDate">
+            <DatePicker
+                value={date}
+                onChange={(e)=>updateDateFunction(e)}
+                inputPlaceholder="تغییر تاریخ تحویل"
+                shouldHighlightWeekends
+                minimumDate={utils('fa').getToday()}
+                locale="fa" // add this
+            />
+        </div>
         <input className="filterBtn" type="button" value="تایید سفارش" 
         onClick={()=>updateStatus()}/>
         <input className="preBtn" type="button" value="بازگشت" 

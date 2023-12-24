@@ -7,8 +7,8 @@ function PreviewStock(props){
     const defData = props.defData;
 
     const lensRows = defData.stockFaktor;
-    console.log(props)
-    useEffect(() => { 
+    console.log(lensRows)
+    /*useEffect(() => { 
         if(lensRows){
         for(var i=0;i<lensRows.length;i++){
         //const data = orderData&&orderData.rxLenz?orderData.rxLenz.split(','):[];
@@ -40,7 +40,7 @@ function PreviewStock(props){
               console.log(error)
             })
         }  }
-    },[lensRows])
+    },[lensRows])*/
     return(
         <div className="orderDataHolder">
             <table className="orderTable stockTable rtl">
@@ -53,15 +53,17 @@ function PreviewStock(props){
                         <th>قیمت واحد</th>
                         <th>قیمت کل</th>
                     </tr>
-                    {lensRows&&stockDetail.length&&lensRows.map((faktorItem,i)=>(
-                    stockDetail[i]&&<tr key={i}>
+                    {lensRows&&lensRows.map((faktorItem,i)=>(
+                    <tr key={i}>
                         <td>{i+1}</td>
                         {/*<td >{faktorItem.sku}</td>*/}
                         
-                        <td dangerouslySetInnerHTML={{__html:"<strong>"+stockDetail[i].brandName+"</strong>"+"-"+
-                            stockDetail[i].lenzIndex+"<br/>"+
-                            ""+stockDetail[i].material+"-"+
-                            (stockDetail[i].coating&&stockDetail[i].coating)}}></td>
+                        <td dangerouslySetInnerHTML={{__html:"<strong>"+
+                            faktorItem.stockDetail.brandName+"</strong>"+"-"+
+                            faktorItem.stockDetail.lenzIndex+"<br/>"+
+                            ""+faktorItem.stockDetail.material+"-"+
+                            (faktorItem.stockDetail.coating&&
+                            faktorItem.stockDetail.coating)}}></td>
                         <td>{faktorItem.count}</td>
                         <td style={{direction: "ltr"}} >{normalPrice(faktorItem.price)}</td>
                         <td style={{direction: "ltr"}}>

@@ -72,7 +72,7 @@ function BrandHolderStock(props){
           }
     }
     return(
-        <div className='orderLenzData ltr'>
+        <div className='orderLenzData'>
             <div className='lenzData'>
                 {existItems&& <Autocomplete id="Brand"
                     options={content?content.brandList:[]}

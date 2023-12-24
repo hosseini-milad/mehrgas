@@ -29,7 +29,7 @@ function ManageSection1(){
             (result) => {
               //console.log(result);
               setStockList(result);
-              //setStockList(result.stockData);
+              setTimeout(()=>setRefreshRate(Math.random()),1000*120);
             },
             (error) => {
               window.location.href="/login";
@@ -66,9 +66,9 @@ function ManageSection1(){
   },[rxIndex])
     const orderOptions = [
         {title:"سفارشات ثبت شده",status:"inprogress",count:rxList.rxDataInprogress,
-          sCount:stockList.stockDataInprogress,access:"manager"},
+          sCount:stockList.stockDataInprogress,access:"sale"},
         {title:"سفارشات تایید شده",status:"accept",count:rxList.rxDataAccepted,
-          sCount:stockList.stockDataAccepted,access:"control"},
+          sCount:stockList.stockDataAccepted,access:"sale"},
         {title:"ورود خودرو",status:"inVehicle",count:rxList.rxDataInVehicle,
           sCount:stockList.stockDataInVehicle,access:"security"},
         {title:"کنترل فروش",status:"saleControl",count:rxList.rxDataSaleControl,
@@ -76,9 +76,9 @@ function ManageSection1(){
         {title:"خروج خودرو",status:"outVehicle",count:rxList.rxDataOutVehicle,
         sCount:stockList.stockDataOutVehicle,access:"security"},
         {title:"سفارشات نهایی",status:"completed",count:rxList.rxDataCompleted,
-          sCount:stockList.stockDataCompleted,access:"manager"},
+          sCount:stockList.stockDataCompleted,access:"sale"},
         {title:"سفارشات کنسل شده",status:"cancel",count:rxList.rxDataCancel,
-          sCount:stockList.stockDataCancel,access:"factory"},
+          sCount:stockList.stockDataCancel,access:"manager"},
     ]
     //console.log(rxStatus)
     //console.log(stockList)

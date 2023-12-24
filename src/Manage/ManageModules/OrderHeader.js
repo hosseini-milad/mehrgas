@@ -93,8 +93,9 @@ function OrderHeader(props){
                 <div style={{display:"flex",justifyContent:"space-around"}}>
                     <button className='profileBtn' onClick={()=>props.setShowDetail((props.showDetail+1)%2)}>
                     {props.showDetail?"بستن جزئیات":"مشاهده جزئیات"}</button>
+                {(orderData.status==="completed"||orderData.status==="outVehicle")?
                 <button className='profileBtn' onClick={()=>window.open("/print/"+orderData.rxOrderNo,'_blank')}>
-                    {"چاپ سفارش"}</button></div>
+                    {"چاپ سفارش"}</button>:<></>}</div>
             </div>
         </div>
         

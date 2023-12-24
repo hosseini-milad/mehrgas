@@ -16,7 +16,7 @@ function ProfileOrderList(props){
     const [searchList,setSearchList] = useState()
     const [searchStockList,setSearchStockList] = useState()
     const [pageNumber,setPageNumber] = useState('')
-    //console.log(searchStockList)
+    
     useEffect(()=>{
       //if(!searchTrigger)return
         const postOptions={
@@ -26,10 +26,10 @@ function ProfileOrderList(props){
               'x-access-token':token.token,
             'userId':token.userId},
             body:JSON.stringify({status:searchText?'':props.status,
-                search:searchText,offset:pageNumber,all:1,
+                search:searchText,offset:pageNumber,
+                all:1,group:token&&token.group,
                 userId:(token.access==="customer"||!token.access)?token.userId:''})
           }
-          console.log(postOptions)
             fetch(env.siteApi+"/order/stockSeprate/search",postOptions)
             .then(res => res.json())
             .then(
@@ -81,7 +81,7 @@ function ProfileOrderList(props){
             
         </div>
         ))}
-        {searchStockList?<Paging content={{size:stockRX===0?props.count:props.sCount}} setPageNumber={setPageNumber} pageNumber={pageNumber} perPage={10}/>:<></>}
+        {searchStockList?<Paging content={{size:props.sCount}} setPageNumber={setPageNumber} pageNumber={pageNumber} perPage={10}/>:<></>}
         </>
     )
 }

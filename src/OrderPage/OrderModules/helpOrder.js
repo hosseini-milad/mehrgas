@@ -6,7 +6,7 @@ function HelpOrder(){
             <ul><li>
             <a className="helpOrder" href="/profile#account">اطلاعات کاربری خود را تکمیل کنید </a>
             <a className="profileBtn" href="/profile#account">اطلاعات کاربری</a></li>
-            <li>کارشناسان MGM با شما تماس خواهند گرفت </li>
+            <li>کارشناسان مهرگاز با شما تماس خواهند گرفت </li>
             <li>بعد از احراز هویت، می توانید به راحتی ثبت سفارش نمایید </li>
             </ul>
         </div>

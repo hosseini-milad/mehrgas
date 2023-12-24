@@ -7,7 +7,7 @@ const token = JSON.parse(localStorage.getItem('token-lenz'));
 function StockResult(props){
     const price=props.priceFilter?props.price:0;
     const content = props.content
-    //console.log(props.count)
+    console.log(props.count)
     const saveCart=(sku)=>{
         const postOptions={
             method:'post',
@@ -21,8 +21,8 @@ function StockResult(props){
             .then(res => res.json())
             .then(
               (result) => {
-                props.setOrderCount(result)
-                setTimeout(()=>window.location.reload(),200)
+                window.location.reload()
+                //setTimeout(()=>window.location.reload(),200)
               },
               (error) => {
                console.log({error:error.message});
@@ -30,38 +30,20 @@ function StockResult(props){
         );
     }
     
-    //console.log(props)
-    useEffect(() => {
-        const postOptions={
-            method:'get',
-            headers: { 'Content-Type': 'application/json' ,
-            "x-access-token": token&&token.token,
-            "userId":token&&token.userId}
-          }
-          //console.log(postOptions)
-          fetch(env.siteApi+"/order/getCart",postOptions)
-            .then(res => res.json())
-            .then(
-              (result) => {
-                props.setOrderCount(result.length)
-              },
-              (error) => {
-               console.log({error:error.message});
-              }
-        );
-    },[props.orderCount])
     return(
         <div className="orderDataHolder StockDataHolder">
             {content.size&&content.size===1?
                 <div className="stockResultItems"><div>
-                    <strong>{content.stock[0].brandName}</strong>
+                    <strong>{content.stock[0].brandName} - </strong>
+                    <strong>{content.stock[0].sku} - </strong>
                     <span>{normalPrice(content.stock[0].price)}</span>
                 </div>
                   <input className="orderBtn stockAdd" id="Add"
                     onClick={()=>{
                         saveCart({sku:content.stock[0].sku,
                           
-                          count:props.count[0]})
+                          count:props.count?props.count.toString()
+                          .replace(/[۰-۹]/g, d => '۰۱۲۳۴۵۶۷۸۹'.indexOf(d)):''})
                       
                     }}
                     value="افزودن" type="button"/>

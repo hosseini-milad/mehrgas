@@ -3,37 +3,28 @@ function Collection(){
         <div className="collectionHolder">
             <div className="collectionItem">
                 <div className="collectionImgHolder">
-                    <img src="/img/glass01.jpg" alt="کالکشن Essence" />
+                    <img src="/img/product01.jpg" alt="کپسول خالی" />
                 </div>
                 <div className="collectionTextHolder">
-                    <h3>کالکشن Essence</h3>
+                    <h3>شارژ کپسول 2 تا 50 کیلویی</h3>
                     {/*<a href="#" className="readMore">مشاهده محصولات</a>*/}
                 </div>
             </div>
             <div className="collectionItem">
                 <div className="collectionImgHolder">
-                    <img src="/img/glass02.jpg" alt="کالکشن Revo" />
+                    <img src="/img/product02.jpg" alt="گاز مایع بالک" />
                 </div>
                 <div className="collectionTextHolder">
-                    <h3>کالکشن Revo</h3>
+                    <h3>شارژ مخازن گاز مایع بالک</h3>
                     {/*<a href="#" className="readMore">مشاهده محصولات</a>*/}
                 </div>
             </div>
             <div className="collectionItem">
                 <div className="collectionImgHolder">
-                    <img src="/img/glass03.jpg" alt="کالکشن MGM PLUS" />
+                    <img src="/img/product04.jpg" alt="کپسول 2 تا 50 کیلویی" />
                 </div>
                 <div className="collectionTextHolder">
-                    <h3>کالکشن MGM PLUS</h3>
-                    {/*<a href="#" className="readMore">مشاهده محصولات</a>*/}
-                </div>
-            </div>
-            <div className="collectionItem">
-                <div className="collectionImgHolder">
-                    <img src="/img/glass04.jpg" alt="کالکشن KODAK" />
-                </div>
-                <div className="collectionTextHolder">
-                    <h3>کالکشن KODAK</h3>
+                    <h3>کپسول2 تا 50 کیلویی</h3>
                     {/*<a href="#" className="readMore">مشاهده محصولات</a>*/}
                 </div>
             </div>

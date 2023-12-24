@@ -3,7 +3,8 @@ function OrderStatusMessage(props){
     return(
         <div className="profileOrderInfo">
             {!props.status.includes("cancel")&&<>
-            <span>تاریخ ثبت: {props.pWeek} {props.pDate}<small> ({props.rawDate}) </small></span>
+            {/*<span>تاریخ ثبت: {props.pWeek} {props.pDate}<small> ({props.rawDate}) </small></span>*/}
+            <span>تاریخ تحویل: {props.oWeek} {props.orderDate}</span>
             </>}
             {props.status.includes("cancel")&&<>
             <span>تاریخ لغو: {props.pWeek} {props.pDate}</span>

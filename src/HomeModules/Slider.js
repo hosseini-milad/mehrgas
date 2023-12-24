@@ -24,7 +24,7 @@ function Slider(props){
                     <img className="sliderImg" src={env.siteApiUrl+slider[sliderIndex].imageUrl} alt={slider[sliderIndex].title} />:
                 env.loader}
                 <div className="sliderTextHolder">
-                    <img src="/logo.png" alt = "logo" />
+                    <img src="/logo.svg" alt = "logo" />
                     <div className="sliderText">
                         {slider&&slider[sliderIndex]?<span>{slider[sliderIndex].description}</span>:''}
                         {slider&&slider[sliderIndex]?<h2>{slider[sliderIndex].title}</h2>:''}

@@ -83,14 +83,14 @@ function ProfileSection1(){
     const orderOptions = [
       {title:"سفارشات ثبت شده",status:"inprogress",count:rxList.rxDataInprogress,
         sCount:stockList.stockDataInprogress,access:"manager"},
-      {title:"سفارشات تایید شده",status:"accept",count:rxList.rxDataAccepted,
+      {title:"سفارشات تایید شده",status:"inVehicle",count:rxList.rxDataAccepted,
         sCount:stockList.stockDataAccepted,access:"control"},
-      {title:"ورود خودرو",status:"inVehicle",count:rxList.rxDataInVehicle,
+      /*{title:"ورود خودرو",status:"inVehicle",count:rxList.rxDataInVehicle,
         sCount:stockList.stockDataInVehicle,access:"security"},
       {title:"کنترل فروش",status:"saleControl",count:rxList.rxDataSaleControl,
         sCount:stockList.stockDataSaleControl,access:"control"},
       {title:"خروج خودرو",status:"outVehicle",count:rxList.rxDataOutVehicle,
-      sCount:stockList.stockDataOutVehicle,access:"security"},
+      sCount:stockList.stockDataOutVehicle,access:"security"},*/
       {title:"سفارشات نهایی",status:"completed",count:rxList.rxDataCompleted,
         sCount:stockList.stockDataCompleted,access:"manager"},
       {title:"سفارشات کنسل شده",status:"cancel",count:rxList.rxDataCancel,
@@ -101,7 +101,7 @@ function ProfileSection1(){
         <><div className="profileHolder">
             {orderOptions.map((order,i)=>(
                 <div className={i===rxIndex?"profileItemActive profileItem":"profileItem"} key={i}
-                  style={{backgroundColor:i===6?"coral":i===5?"lightGreen":"",
+                  style={{backgroundColor:i===3?"coral":i===2?"lightGreen":"",
                     width:i===6?"44%":i===5?"44%":""}} 
                     onClick={()=>setIndex(i)}>
                     <div className="profileText">

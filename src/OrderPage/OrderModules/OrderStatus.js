@@ -15,7 +15,7 @@ function OrderStatus(props){
     const[pDate,setPDate] = useState('');
     const[pWeek,setPWeek] = useState('');
     const[color,setColor] = useState('');
-    console.log(orderLogInfo)
+    //console.log(rxOrderNo)
     useEffect(() => {
       const postOptions={
         method:'post',

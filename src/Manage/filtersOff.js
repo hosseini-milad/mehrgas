@@ -26,6 +26,17 @@ function FiltersOffers(props){
                 renderInput={(params) =>
                 <TextField {...params} label="گروه مشتری"/>}
             />
+            <Autocomplete
+                options={props.access||[]} 
+                freeSolo
+                style={{ width: "100%"}}
+                
+                onChange={(_event, Value)=>props.setManResult(pState => 
+                    {return { ...pState, access:Value }}
+                )}
+                renderInput={(params) =>
+                <TextField {...params} label="دسترسی"/>}
+            />
             {/*<Autocomplete
                 options={["initial","inprogress","cancel","faktor","delivered","inproduction"]} 
                 freeSolo
