@@ -66,7 +66,7 @@ exports.loginApi=async(req,res)=>{
       ////console.log((phone,password)
       // Validate user input
       if (!(phone && password)) {
-        res.status(400).send("All input is required");
+        res.status(400).send({error:"اطلاعات وارد نشده است"});
         return;
       }
       // Validate if user exist in our database
@@ -75,10 +75,14 @@ exports.loginApi=async(req,res)=>{
         
         // return new user
         //res.status(201).json(user)
-        res.status(400).send("User Not Exists");
+        res.status(500).send({error:"کاربر موجود نیست"});
         return;
       }
-
+      if(user.access ==="customer"||user.access==="request"||user.access===""){
+        
+        res.status(500).send({error:"لطفا با پیامک وارد شوید"});
+        return;
+      }
       if (user && (await bcrypt.compare(password, user.password))) {
         // Create token
         const token = jwt.sign(
@@ -114,11 +118,11 @@ exports.loginApi=async(req,res)=>{
       }
 
       else{
-        res.status(400).send("Invalid Password"); 
+        res.status(400).send({error:"رمز عبور اشتباه است"}); 
       }
         //res.status(400).send("Invalid Credentials");
       } catch (err) {
-        res.status(400).send("error occure"); 
+        res.status(400).send({error:"خطایی رخ داده است"}); 
       }
 }
 exports.loginManager=async(req,res)=>{
@@ -167,18 +171,30 @@ exports.sendOTPApi=async(req,res)=>{
   //console.log(("SendOTPApi")
   
     try {
-    const { phone } = req.body;
-    ////console.log((phone)
+    var { phone } = req.body;
+    var mobilePhone = phone
+    const userData = await User.findOne({phone: phone })
     var otpValue = Math.floor(Math.random() * 8999)+1000 ;
+
+    if(phone.length===6){
+      
+      var userDetail = ''
+      if(userData){
+        userDetail = await userInfo.findOne({phone: phone })
+      if(userDetail&&userDetail.mobile)
+        mobilePhone = userDetail.mobile
+      }
+    } 
     
-    const user = await User.findOne({phone: phone });
-    ////console.log((otpValue)
     if(user){
       api.VerifyLookup({
         token: otpValue,
         template: process.env.template,//"mgmVerify",
-        receptor: phone
-    },);
+        receptor: mobilePhone
+    },function(response,status){
+      console.log(response)
+      console.log(status)
+    });
       const newUser = await User.updateOne(
         {phone:phone},{$set:{otp:otpValue}});
         ////console.log((newUser)
@@ -188,8 +204,11 @@ exports.sendOTPApi=async(req,res)=>{
       api.VerifyLookup({
         token: otpValue,
         template: process.env.template,//"mgmVerify",
-        receptor: phone
-    },);
+        receptor: mobilePhone
+    },function(response,status){
+      console.log(response)
+      console.log(status)
+    });
       const newUser = await User.create(
         {phone:phone,otp:otpValue,email:phone+"@mgmlenz.com"});
       //res.status(200).json({"error":"user not found"});
@@ -218,7 +237,7 @@ exports.loginOTPApi=async(req,res)=>{
   
       // Validate user input
       if (!(phone && otp)) {
-        res.status(400).send("All input is required");
+        res.status().send("All input is required");
         return;
       }
       // Validate if user exist in our database
@@ -246,7 +265,7 @@ exports.loginOTPApi=async(req,res)=>{
           "error":"wrong otp"
         });
       }
-      //res.status(400).send("Invalid Credentials");
+      //res.status().send("Invalid Credentials");
     } catch (err) {
       //console.log((err);
     }
@@ -275,11 +294,12 @@ exports.userInfoApi=async(req, res) => {
 }
 exports.userInfoSetApi=async(req, res) => {
   //console.log(("UserInfoSetApi")
+
     try{
     const data = { 
       userName:req.body.userName,
       phone:req.body.phone,
-      userId:req.headers["userid"],
+      userId:req.body.userId?req.body.userId:req.headers["userid"],
       meliCode:req.body.meliCode,
       birthDate: req.body.birthDate,
       mobile:req.body.mobile,
@@ -287,13 +307,13 @@ exports.userInfoSetApi=async(req, res) => {
       hesab:req.body.hesab,
       job:req.body.job
     }
-    const userData = await userInfo.findOne({userId: req.headers["userid"] });
-    const usersUpdate = await User.updateOne({_id: req.headers["userid"] },
+    const userData = await userInfo.findOne({userId: data.userId});
+    const usersUpdate = await User.updateOne({_id: data.userId },
     {$set:{cName:data.userName}})
     ////console.log((userData)
     ////console.log((data)
     if(userData){
-      const updateUserInfo= await userInfo.updateOne({userId: req.headers["userid"]},{$set:data})
+      const updateUserInfo= await userInfo.updateOne({userId: data.userId},{$set:data})
       res.status(200).json({updateuser:updateUserInfo});
     }
     else{

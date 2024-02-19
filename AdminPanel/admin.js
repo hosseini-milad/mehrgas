@@ -18,7 +18,7 @@ const brands = require('../model/brands/brand');
 const ManufactureStateSchema= require('../model/brands/manufacture')
 const brandSlider = require('../model/brands/brandsSlider');
 const brandsBanner = require('../model/brands/brandsBanner');
-const RXSchema = require('../model/Order/rx');
+const orders = require('../model/Order/orders');
 const job = require('../model/job');
 const menu = require('../model/menu');
 const color = require('../model/products/color');
@@ -28,7 +28,6 @@ const paymentMethod = require('../model/products/paymentMethod');
 const help = require('../model/help');
 const manufacture = require('../model/Order/manufacture');
 const param = require('../model/Params/param');
-const stock = require('../model/Order/stock');
 const customerSchema=require('../model/customers')
 const cover = require('../model/products/cover');
 const pages = require('../model/pages');
@@ -37,7 +36,7 @@ const Offers = require('../model/Order/Offers');
 const sepidarstock = require('../model/Order/sepidarstock');
 const contentParent = {
     name:'content',
-    icon:'eye'
+    icon:'eye' 
 }
 const userParent = {
     name:'User',
@@ -89,7 +88,7 @@ const AdminBroOptions = {
     {resource: paymentMethod, options: { parent: parameterParent } },
     {resource: cover, options: { parent: parameterParent } },
     {resource: param, options: { parent: parameterParent } },
-    {resource: RXSchema, options: { parent: userParent } },
+    {resource: orders, options: { parent: userParent } },
     
     {resource: help, options: { parent: parameterParent ,
       properties: {
@@ -189,18 +188,7 @@ const AdminBroOptions = {
       }
     }
   } }
-    ],
-    locale: {
-        translations: {
-        actions: {
-            new: 'جدید',
-            list:'لیست'
-            }
-        },
-        buttons: {
-            save: 'ذخیره'
-        }
-    }
+    ]
 }
 const adminBro = new AdminBro(AdminBroOptions);
 

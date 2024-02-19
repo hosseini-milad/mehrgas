@@ -19,6 +19,7 @@ const userSchema = new mongoose.Schema({
   sex: { type: String },
   mahiat: { type: String },
   activity: { type: String },
+  meli: { type: String },
   phone1: { type: String },
   fax: { type: String },
   state:{ type: String },

@@ -1,14 +1,20 @@
 const express = require("express");
 const apiRoutes = require('./router/mainRouter');
 const apiProduct = require('./router/productApi');
+
+const orderPanelApi = require('./router/panelOrderApi')
+const productPanelApi = require('./router/panelProductApi')
+const UserPanelApi = require('./router/panelUserApi')
+
 const apiOrder = require('./router/orderApi');
 const apiSetting = require('./router/settingApi');
 const apiSepidar = require('./router/sepidarApi')
 const apiHesabfa = require('./router/hesabFaApi')
-const bodyParser = require('body-parser');
+const CRMPanelApi = require('./router/panelCrmApi')
+const bodyParser = require('body-parser'); 
 const jsonParser = bodyParser.json();
 const expressAdmin = require('@admin-bro/express');
-const cors = require("cors");
+const cors = require("cors"); 
 const multer = require('multer');
 const adminBro = require('./AdminPanel/admin')
 var storage = multer.diskStorage(
@@ -76,6 +82,11 @@ app.use('/api/setting', apiSetting)
 app.use('/api/product', apiProduct)
 app.use('/api/sepidar',apiSepidar)
 app.use('/api/hesabfa',apiHesabfa)
+
+app.use('/api/panel/order',orderPanelApi)
+app.use('/api/panel/product',productPanelApi)
+app.use('/api/panel/user',UserPanelApi)
+app.use('/api/panel/crm',CRMPanelApi)
 
 app.use(express.json());
 

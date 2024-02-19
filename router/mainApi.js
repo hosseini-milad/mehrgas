@@ -220,7 +220,19 @@ exports.customersApi=async(req,res)=>{
         group:req.body.group,
         offset:req.body.offset?req.body.offset:"0"
     }
-    
+    const userTotalData = await user.aggregate([
+        {$lookup:{
+            from : "userinfos", 
+            localField: "_id", 
+            foreignField: "userId", 
+            as : "userDetail"
+        }},
+        {$match:(data.customer?{$or:[
+            {phone:new RegExp('.*' + data.customer + '.*')},
+            {cName:new RegExp('.*' + data.customer + '.*')},
+            {cName:new RegExp('.*' + data.customerAlt + '.*')}]}:{})},
+        {$match:(data.group?{group:data.group}:{})},
+        {$skip:parseInt(data.offset)},{$limit:10}])
         //const userCount = (await user.find()).length;
         const userData = await user.find(data.customer?{$or:[
             {phone:new RegExp('.*' + data.customer + '.*')},
@@ -238,7 +250,8 @@ exports.customersApi=async(req,res)=>{
         //const filter1Report = data.customer?userData.filter(item=>item.phone.includes(data.customer)):userData;
         //const filter2Report = data.group?filter1Report.filter(item=>item.group===data.group):filter1Report;
         const userGroup = [...new Set(totalUser.map(item=>item.group))];
-        res.json({customers:userData,userData:userAll,size:userAll.length,userGroup:userGroup})
+        res.json({customers:userData,userData:userAll,size:userAll.length,
+            userGroup:userGroup,totalUser:userTotalData})
     }
     catch(error){
         res.status(500).json({message: error.message})

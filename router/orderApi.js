@@ -618,7 +618,7 @@ const checkRep=async(userNo,dateYear)=>{
     var rxTemp = '';
     while(1){
         
-        const foundRx = rxTemp&&await OrdersSchema.findOne({rxOrderNo:rxTemp});
+        const foundRx = rxTemp&&await OrdersSchema.findOne({stockOrderNo:rxTemp});
         if(rxTemp&&foundRx)break
         else rxTemp=userNo+
             (Math.floor(Math.random() * 1000000) + 100000)

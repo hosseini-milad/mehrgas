@@ -2,7 +2,6 @@ const mongoose = require("mongoose");
 
 const OrdersSchema = new mongoose.Schema({
   userId:{type: mongoose.Schema.Types.ObjectId, ref: 'user'},
-  stockId: {type: mongoose.Schema.Types.ObjectId, ref: 'stocks'},
   manageId: {type: String},
   group: { type: String },
   stockOrderNo:{type:String},
