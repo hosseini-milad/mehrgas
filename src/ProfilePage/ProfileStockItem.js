@@ -8,6 +8,7 @@ function ProfileStockItem(props){
     const orderData = props.orderData;
     const [brandData,setBrandData] = useState('')
     const [userInfo , setUserInfo] = useState({})
+    const [userMain,setUserMain] = useState()
     const [showDetail,setShowDetail] = useState(props.open);
     
     useEffect(() => {
@@ -42,6 +43,7 @@ function ProfileStockItem(props){
                 .then(
                   (result) => {
                     setUserInfo(result)
+                    setUserMain(result.userMainData)
                   },
                   (error) => {
                     console.log({error:error});
@@ -76,7 +78,8 @@ function ProfileStockItem(props){
             <div className="profileOrderList">
             <div className="profileOrder">
                 <StockHeader manager={props.manager} orderData={orderData} setRefreshRate={props.setRefreshRate}
-                 userInfo={userInfo}  setShowDetail={setShowDetail} showDetail={showDetail}/>
+                 userInfo={userInfo}  setShowDetail={setShowDetail} showDetail={showDetail}
+                 userMain={userMain}/>
                 
                 <div style={{display:showDetail?"block":"none"}}>
                 {orderData&&<StockPreview lenzDetail={brandData} defData={orderData} />}

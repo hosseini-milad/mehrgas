@@ -12,6 +12,8 @@ import SimpleStockHeader from '../ManagerAction/SimpleStockHeader';
 
 function StockHeader(props){
     const orderData = props.orderData;
+    const userData = props.userMain
+    const userProfile=userData&&userData.profile
     //console.log(orderData)
     persianDate.toCalendar('persian');
     const pDate = new persianDate(new Date(orderData.date)).format();
@@ -91,7 +93,13 @@ function StockHeader(props){
                     {props.showDetail?"بستن جزئیات":"مشاهده جزئیات"}</button>
                     {(orderData.status==="completed"||orderData.status==="outVehicle")?
                     <button className='profileBtn' onClick={()=>window.open("/print/"+orderData.stockOrderNo,'_blank')}>
-                    {"چاپ سفارش"}</button>:<></>}</div>
+                    {"چاپ سفارش"}</button>:<></>}
+                    {(orderData.payStatus!=="paid"&&
+                    userProfile==="659b9ce3d9c3154d2f94a82e")?<button className='profileBtn' onClick={()=>window.open(
+                        "https://panel.mehrgaz.com/pay/mellat?orderid="+orderData.stockOrderNo,'_blank')}>
+                    {"پرداخت سفارش"}</button>:<></>} 
+                </div>
+                
             </div>
         </div>
         {alertShow.show?<Alert data={alertShow} setAlertShow={setAlertShow}/>:''}

@@ -113,8 +113,9 @@ function ProfileSection1(){
             ))}
         </div>
         <div className="profileOrderHolder">
-            <ProfileOrderList setRefreshRate={setRefreshRate} status={orderOptions[rxIndex].status} setIndex={setIndex}
-              rxIndex={rxIndex} manager="customer"  title={orderOptions[rxIndex].title} count={orderOptions[rxIndex].count}/>
+            {!refreshRate?<ProfileOrderList setRefreshRate={setRefreshRate} status={orderOptions[rxIndex].status} setIndex={setIndex}
+              rxIndex={rxIndex} manager="customer"  title={orderOptions[rxIndex].title} count={orderOptions[rxIndex].count}/>:
+              <></>}
         </div>
         </>
     )

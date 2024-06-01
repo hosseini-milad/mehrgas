@@ -5,7 +5,8 @@ function ProfileTab(props){
         {tab:"تمامی سفارشات",icon:"heart-o",url:"favourite"},
         {tab:"اعتبار من",icon:"clock-o",url:"visit"},
         {tab:"آدرس ها",icon:"map-o",url:"address"},
-        {tab:"اطلاعات کاربری",icon:"user-o",url:"account"}];
+        {tab:"پیام ها",icon:"envelope-o",url:"messages"},
+        /*{tab:"اطلاعات کاربری",icon:"user-o",url:"account"}*/];
     const url = window.location.href;
     if(url.split('#')[1])
         for(var i=0;i<tabOptions.length;i++)

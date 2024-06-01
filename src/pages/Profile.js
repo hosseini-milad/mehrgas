@@ -9,11 +9,32 @@ import ProfileSection4 from "../ProfilePage/profileSection4";
 import ProfileSection5 from "../ProfilePage/profileSection5";
 import ProfileSection6 from "../ProfilePage/profileSection6";
 import ProfileTab from "../ProfilePage/profileTab"
+import ManageMessages from "../Manage/ManageMessages";
 
 function Profile(){
     const [tabIndex,setTabIndex] = useState(0);
     const userData= SimpleAuth(env.siteApi+"/auth/userInfo")
     //console.log(userData)
+    const [logs,setLogs] = useState('')
+    //console.log(tabIndex)
+    useEffect(() => {
+        const postOptions={
+            method:'post',
+            headers: {'Content-Type': 'application/json'},
+            body:JSON.stringify({status:"unread",kind:"customer"})
+          }
+          //console.log(postOptions)
+        fetch(env.siteApi + "/setting/log",postOptions)
+      .then(res => res.json())
+      .then(
+        (result) => {
+            setLogs(result)
+        },
+        (error) => {
+          console.log(error);
+        }
+        
+    )},[])
     if(userData.error){
         localStorage.removeItem('token-lenz');
         window.location="/login";
@@ -29,7 +50,8 @@ function Profile(){
             {tabIndex===2&&<ProfileSection2 />}
             {tabIndex===3&&<ProfileSection3 />}
             {tabIndex===4&&userData&&<ProfileSection4 addressData={userData.userAddress}/>}
-            {tabIndex===5&&userData&&<ProfileSection6 jobData={userData.jobData}
+            {tabIndex===5&&<ManageMessages logs={logs}/>}
+            {tabIndex===6&&userData&&<ProfileSection6 jobData={userData.jobData}
                 user={userData.user} userData={userData.userInfo}/>}
         </main>
     )

@@ -41,6 +41,19 @@ export function normalPriceCount(priceText,count){
     (rawPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",").replace( /^\D+/g, ''))
   )
 }
+export function normalPriceDiscountCount(priceText,discount,count){
+  if(!priceText||priceText === null||priceText === undefined) return("")
+  var discount = parseInt(discount.toString())
+  try{priceText =priceText.split(' ')[0];}catch{}
+  if(priceText === "0"||priceText === 0)return("رایگان");
+  var rawPrice = parseInt(priceText.toString().replace(/\D/g,''))-discount
+  
+  var countPrice = rawPrice*count
+  //console.log(rawPrice,priceText)
+  return(
+    (countPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",").replace( /^\D+/g, ''))
+  )
+}
 export function purePrice(priceText){
   if(!priceText)return(0)
   var rawPrice = priceText.toString().replaceAll(',', '')

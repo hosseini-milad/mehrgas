@@ -64,12 +64,12 @@ function ProfileOrderList(props){
         <>
         <div className="headerOrderPlace">
             <h2 className="profileTitle">{props.title}</h2>
-            <TextField label="جستجو" variant="outlined" 
+            {/*<TextField label="جستجو" variant="outlined" 
                 onChange={(e)=>{
                     setSearch(e.target.value)
                     setSearchTrigger(e.target.value.length>2?1:0)
                 }
-                }/>
+                }/>*/}
         </div>
         <div className="rxStockTabHolder">
             <div className="rxStockTab rxStockTabActive">

@@ -1,12 +1,13 @@
 import { useState } from "react";
 import ButtonLoaderSimple from "../../../Components/BtnLoaderSimple";
-import env, { jalali_to_gregorian, normalPrice, normalPriceCount, sumPrice } from "../../../env";
+import env, { jalali_to_gregorian, normalPrice, normalPriceCount, normalPriceDiscountCount, sumPrice } from "../../../env";
 import 'react-modern-calendar-datepicker/lib/DatePicker.css';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import TextField from '@material-ui/core/TextField';
 import DatePicker, {Calendar, utils } from "react-modern-calendar-datepicker";
 import { useEffect } from "react";
 import SimpleAlert from "../../../Components/SimpleAlert";
+import TempAlert from "../../../Components/TempAlert";
 const token = JSON.parse(localStorage.getItem('token-lenz'))
 
 function StockFaktorPreview(props){
@@ -17,6 +18,7 @@ function StockFaktorPreview(props){
     const [manager,setManager] = useState()
     const [selectedCustomer,setCustomer] = useState()
     const [customerList,setCustomerList] = useState()
+    const [error,setError] = useState('')
     useEffect(()=>{
       if(alertShow.action)
         window.setTimeout(()=>document.location.href=token.access==="customer"?
@@ -31,7 +33,7 @@ function StockFaktorPreview(props){
           "userId":token&&token.userId},
           body:JSON.stringify({userId:selectedCustomer?selectedCustomer._id:''})
         }
-        //console.log(postOptions)
+        console.log(postOptions)
         fetch(env.siteApi+"/order/getCart",postOptions)
           .then(res => res.json())
           .then(
@@ -100,6 +102,7 @@ function StockFaktorPreview(props){
             standardFaktor.push({
                 sku:cart[i].sku,
                 weight:cart[i].weight,
+                type:cart[i].type,
                 count:cart[i].count?cart[i].count:"1",
                 price:cart[i].price})
         }
@@ -125,9 +128,13 @@ function StockFaktorPreview(props){
             .then(res => res.json())
             .then(
               (result) => {
-                //console.log(result)
+                if(result.error){
+                  setError({title:result.errorTitle,error:result.error})
+                }
+                else{
                 clearCart();
                 setAlertShow({show:true,action:0})
+                }
               },
               (error) => {
                 console.log(error);
@@ -220,7 +227,7 @@ function StockFaktorPreview(props){
               }
         );
     }
-    console.log(faktor)
+    //console.log(faktor)
     return(<>
         <div className="tableHolder">
           {faktor&&faktor.cart?<table className="orderTable stockTable rtl">
@@ -231,6 +238,7 @@ function StockFaktorPreview(props){
                     <th>برند</th>
                     <th style={{width:"35px"}}>تعداد</th>
                     <th>قیمت واحد</th>
+                    <th>تخفیف</th>
                     <th>قیمت کل</th>
                     <th>حذف</th>
                 </tr>
@@ -250,12 +258,24 @@ function StockFaktorPreview(props){
                     (normalPrice(faktorItem.price))+"<br/>"+
                     (faktorItem.fob?" FOB ":"")}}></td>
                     <td style={{direction: "ltr"}}dangerouslySetInnerHTML={{__html:
-                        normalPriceCount(faktorItem.price,faktorItem.count)}}></td>
+                        normalPriceCount(faktorItem.discount,1)}}></td>
+                    <td style={{direction: "ltr"}}dangerouslySetInnerHTML={{__html:
+                        normalPriceDiscountCount(faktorItem.price,faktorItem.discount,
+                          faktorItem.count)}}></td>
                     <td className="deleteBtn" onClick={()=>removeItem(faktorItem)}>×</td>
                     </tr>
                 ))}
+                
+                {faktor&&faktor.cartDiscount?<tr>
+                    <td colSpan={3}></td>
+                    <td className="mobileHide"></td>
+                    <td className="mobileHide"></td>
+                    <td>تخفیف</td>
+                    <td colSpan={2} style={{fontSize:"13px"}}>
+                      {normalPrice(faktor&&faktor.cartDiscount)} ریال</td>
+                </tr>:<></>}
                 <tr>
-                    <td colSpan={2}></td>
+                    <td colSpan={3}></td>
                     <td className="mobileHide"></td>
                     <td className="mobileHide"></td>
                     <td>قیمت کل</td>
@@ -263,7 +283,7 @@ function StockFaktorPreview(props){
                       {normalPrice(faktor&&faktor.cartPrice)} ریال</td>
                 </tr>
                 <tr>
-                    <td colSpan={2}></td>
+                    <td colSpan={3}></td>
                     <td className="mobileHide"></td>
                     <td className="mobileHide"></td>
                     <td>اعتبار مورد نیاز</td>
@@ -271,7 +291,7 @@ function StockFaktorPreview(props){
                       {faktor&&faktor.cartCredit}</td>
                 </tr>
                 <tr>
-                    <td colSpan={2}></td>
+                    <td colSpan={3}></td>
                     <td className="mobileHide"></td>
                     <td className="mobileHide"></td>
                     <td>اعتبار شما</td>
@@ -303,6 +323,7 @@ function StockFaktorPreview(props){
                 title={"ثبت نهایی سبد سفارشات"} popText={"آیا از ثبت سفارش اطمینان دارید؟"}/>
                 <button className="orderBtn warnBtn" onClick={clearCart}>خالی کردن سفارشات</button>
                 </>:<> <div></div></>}
+                {error?<TempAlert title={error.title} text={error.error} action={()=>setError('')}/>:<></>}
             {/*((token.access==="manager"||token.access==="sale")&&faktor&&faktor.length)?
             <ButtonLoaderSimple className={"orderBtn"} action={()=>updateOrderStatus(1)}
                 style={{float: "none"}} completed={()=>setAlertShow({show: true,title:"تایید سفارش",

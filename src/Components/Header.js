@@ -68,7 +68,11 @@ const Header = (props)=>{
                 <div className="header3 eSpace showDesktop">
                 </div>
                 <div className="header3">
-                    
+                    {/*<a className="headerTab bellTab showDesktop" 
+                    href="https://client.mehrgaz.com">
+                        <i className="icon-size fas fa-credit-card"></i>
+                        <span >ورود به پنل جدید</span>
+    </a>*/}
                     
                     {props.user?<a className="headerTab bellTab showDesktop" >
                         <i className="icon-size fas fa-credit-card"></i>
