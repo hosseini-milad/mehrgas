@@ -37,7 +37,7 @@ const Header = (props)=>{
                         <a className="menuConvasItem activeMenu" href="https://mehrgaz.com">
                             صفحه اصلی
                         </a>
-                        <a className="menuConvasItem" href="/order">
+                        <a className="menuConvasItem" href="https://mehrgaz.crm24.io/login">
                             سفارش آنلاین
                         </a>
                         <a className="menuConvasItem" href="/services">
@@ -48,9 +48,6 @@ const Header = (props)=>{
                         </a>
                         <a className="menuConvasItem" href="/contact">
                             تماس با ما
-                        </a>
-                        <a className="menuConvasItem" href="/download/mehrgas.apk">
-                            دانلود نرم افزار سفارشات
                         </a>
                     </div>
                 </div>

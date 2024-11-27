@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import env from "../env";
 import HelpOrder from "../OrderPage/OrderModules/helpOrder";
+import NewOrder from "../OrderPage/OrderModules/newOrder";
 import OrderStep01 from "../OrderPage/OrderStep01"
 import OrderStep02 from "../OrderPage/OrderStep02";
 import OrderStep03 from "../OrderPage/OrderStep03";
@@ -198,6 +199,10 @@ function Order(){
     }
     return(
     <main className="pagesMain">
+      <NewOrder />
+      </main>)
+    return(
+      <main className="pagesMain">
         {/*<BreadCrumb data={[
             {link:"/",label:" خانه / "},
             {link:"/order",label:"سفارش آنلاین / "},
